@@ -16,7 +16,7 @@ const RecipeItem = ({ recipe }) => {
           target="_blank"
           className="float-right"
         >
-          <Icon name="link" size="16px" />
+          <Icon name="link" size="1.3em" />
           &nbsp;Go to Recipe
         </Card.Link>
       </Card.Body>
