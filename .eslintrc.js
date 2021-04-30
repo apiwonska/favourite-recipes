@@ -27,6 +27,7 @@ module.exports = {
     'react/react-in-jsx-scope': 0,
     'react/prop-types': 1,
     'arrow-body-style': 1,
+    'import/prefer-default-export': 1,
     'no-console': 1,
     'no-unused-vars': 1,
     'prettier/prettier': [
