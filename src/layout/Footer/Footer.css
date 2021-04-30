@@ -3,8 +3,8 @@
   justify-content: center;
   align-items: center;
   min-height: 80px;
-  color: white;
-  background-color: #2d3047;
+  color: var(--light-color);
+  background-color: var(--strong-color);
   font-size: 1.4rem;
 }
 

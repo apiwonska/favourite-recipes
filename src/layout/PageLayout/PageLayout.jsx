@@ -1,6 +1,4 @@
 import PropTypes from 'prop-types';
-// Bootstrap
-import Container from 'react-bootstrap/Container';
 
 import './PageLayout.css';
 import Header from '../Header';
@@ -12,10 +10,9 @@ const PageLayout = ({ children }) => (
     <Header />
     <main className="main">
       <CurvedHeaderEdge fill="#f6ab26" />
-      <Container>
+      <div div className="wrapper">
         {children}
-        <button type="button">Click me!</button>
-      </Container>
+      </div>
     </main>
     <Footer />
   </>

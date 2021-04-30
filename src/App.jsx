@@ -1,4 +1,4 @@
-import PageLayout from 'shared/PageLayout';
+import PageLayout from 'layout/PageLayout';
 import RecipeList from 'components/RecipeList';
 
 function App() {
