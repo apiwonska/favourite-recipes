@@ -1,19 +1,21 @@
-import React from 'react';
+import { StrictMode } from 'react';
 import ReactDOM from 'react-dom';
 import { QueryClient, QueryClientProvider } from 'react-query';
 
 import 'bootstrap/dist/css/bootstrap.min.css';
+// eslint-disable-next-line
+
 import App from './App';
 import reportWebVitals from './reportWebVitals';
 
 const client = new QueryClient();
 
 ReactDOM.render(
-  <React.StrictMode>
+  <StrictMode>
     <QueryClientProvider client={client}>
       <App />
     </QueryClientProvider>
-  </React.StrictMode>,
+  </StrictMode>,
   document.getElementById('root')
 );
 
