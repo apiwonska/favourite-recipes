@@ -1,11 +1,12 @@
-import PropTypes from 'prop-types';
+interface CurvedEdgeProps {
+  fill: string;
+}
 
-const CurvedEdge = ({ fill }) => (
+const CurvedEdge: React.FC<CurvedEdgeProps> = ({ fill }) => (
   <svg
     xmlns="http://www.w3.org/2000/svg"
     viewBox="0 0 1440 100"
     style={{ display: 'block' }}
-    alt=""
   >
     <path
       fill={fill}
@@ -15,7 +16,4 @@ const CurvedEdge = ({ fill }) => (
   </svg>
 );
 
-CurvedEdge.propTypes = {
-  fill: PropTypes.string.isRequired,
-};
 export default CurvedEdge;

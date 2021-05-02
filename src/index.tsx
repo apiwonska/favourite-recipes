@@ -1,4 +1,4 @@
-import { StrictMode } from 'react';
+import React from 'react';
 import ReactDOM from 'react-dom';
 import { QueryClient, QueryClientProvider } from 'react-query';
 
@@ -11,11 +11,11 @@ import reportWebVitals from './reportWebVitals';
 const client = new QueryClient();
 
 ReactDOM.render(
-  <StrictMode>
+  <React.StrictMode>
     <QueryClientProvider client={client}>
       <App />
     </QueryClientProvider>
-  </StrictMode>,
+  </React.StrictMode>,
   document.getElementById('root')
 );
 

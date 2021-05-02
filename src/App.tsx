@@ -1,7 +1,7 @@
 import PageLayout from 'layout/PageLayout';
 import RecipeList from 'components/RecipeList';
 
-function App() {
+function App(): JSX.Element {
   return (
     <PageLayout>
       <RecipeList />

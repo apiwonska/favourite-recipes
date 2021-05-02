@@ -7,6 +7,9 @@ module.exports = {
   globals: {
     Atomics: 'readonly',
     SharedArrayBuffer: 'readonly',
+    React: true,
+    expect: true,
+    JSX: true,
   },
   parserOptions: {
     ecmaFeatures: {
@@ -36,7 +39,7 @@ module.exports = {
     'no-unused-vars': 'warn',
     'arrow-body-style': 'warn',
     'no-console': 'warn',
-    'import/prefer-default-export': 'warn',
+    'import/prefer-default-export': 'off',
     'prettier/prettier': [
       'warn',
       {
@@ -81,6 +84,7 @@ module.exports = {
         '@typescript-eslint/no-shadow': ['error'],
         'no-use-before-define': 'off',
         '@typescript-eslint/no-use-before-define': ['error'],
+        // 'no-undef': 'off', // Typescript has its own rule
       },
     },
   ],

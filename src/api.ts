@@ -1,5 +1,7 @@
 import axios from 'axios';
 
+import { RecipeDataInterface } from './components/RecipeList';
+
 const BASE = process.env.REACT_APP_AIRTABLE_BASE_FAVOURITE_RECIPES;
 
 const axiosInstance = axios.create({
@@ -10,7 +12,7 @@ const axiosInstance = axios.create({
   },
 });
 
-export const fetchRecipes = async () => {
+export const fetchRecipes = async (): Promise<RecipeDataInterface> => {
   try {
     const res = await axiosInstance.get(`/recipes?view=grid`);
     return res.data;
