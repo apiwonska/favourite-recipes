@@ -1,5 +1,5 @@
 import './Header.css';
-import LogoSVG from './LogoSVG';
+import LogoSVG from 'assets/LogoSVG';
 
 const Header: React.FC = () => (
   <header className="header">

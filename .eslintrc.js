@@ -84,7 +84,12 @@ module.exports = {
         '@typescript-eslint/no-shadow': ['error'],
         'no-use-before-define': 'off',
         '@typescript-eslint/no-use-before-define': ['error'],
-        // 'no-undef': 'off', // Typescript has its own rule
+      },
+    },
+    {
+      files: ['**/*.test.tsx'],
+      rules: {
+        'react/no-children-prop': 'off', // render method allows only self closing tags
       },
     },
   ],

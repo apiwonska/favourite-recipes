@@ -1,6 +1,6 @@
 import Card from 'react-bootstrap/Card';
 import Icon, { iconEnum } from 'assets/Icon';
-import { RecipeInterface } from '../RecipeList';
+import { RecipeInterface } from 'app_interfaces';
 
 interface RecipeItemProps {
   recipe: RecipeInterface['fields'];
@@ -10,10 +10,7 @@ const RecipeItem: React.FC<RecipeItemProps> = ({ recipe }) => (
   <Card className="m-2 w-100">
     <Card.Body>
       <Card.Title>{recipe.name}</Card.Title>
-      <Card.Text>
-        Some quick example text to build on the card title and make up the bulk
-        of the card&apos;s content.
-      </Card.Text>
+      <Card.Text>{recipe.note}</Card.Text>
       <Card.Link
         href={recipe.link}
         style={{ color: 'blue' }}

@@ -1,28 +1,12 @@
-import { useQuery } from 'react-query';
-import { fetchRecipes } from 'api';
 import Spinner from 'react-bootstrap/Spinner';
 import Alert from 'react-bootstrap/Alert';
+
+import { RecipeInterface } from 'app_interfaces';
 import RecipeItem from '../RecipeItem';
-
-export interface RecipeInterface {
-  id: string;
-  fields: {
-    name: string;
-    link: string;
-    note: string;
-  };
-}
-
-export interface RecipeDataInterface {
-  records: RecipeInterface[];
-}
+import useFetchRecipes from './useFetchRecipes';
 
 const RecipeList: React.FC = () => {
-  const { data, isLoading, isError, error } = useQuery<
-    RecipeDataInterface,
-    Error
-  >('recipes', fetchRecipes);
-
+  const { data, isLoading, isError } = useFetchRecipes();
   if (isLoading) {
     return (
       <Spinner animation="border" role="status" variant="secondary">
@@ -32,10 +16,10 @@ const RecipeList: React.FC = () => {
   }
 
   if (isError) {
-    return <Alert variant="danger">{error}</Alert>;
+    return (
+      <Alert variant="danger">Error occured. Please try again later</Alert>
+    );
   }
-
-  // console.log(data.records);
 
   return (
     <>
