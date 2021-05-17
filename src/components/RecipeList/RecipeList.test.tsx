@@ -1,61 +1,93 @@
-import { render, screen } from '@testing-library/react';
+import {
+  render,
+  screen,
+  waitFor,
+  waitForElementToBeRemoved,
+} from '@testing-library/react';
+import { QueryClient, QueryClientProvider, QueryCache } from 'react-query';
+import user from '@testing-library/user-event';
 
-import { RecipeInterface } from 'app_interfaces';
+import { testServerSetup, server, rest } from '__mocks__/testServer';
+import { getUrl } from 'api';
 import RecipeList from './RecipeList';
-import useFetchRecipesMock from './useFetchRecipes';
 
-jest.mock('./useFetchRecipes.ts', () => jest.fn());
+const queryCache = new QueryCache();
 
-const createRecipe = (n: number): RecipeInterface => ({
-  id: `${n}`,
-  fields: {
-    name: `Recipe title ${n}`,
-    link: `url ${n}`,
-    note: `Best apple pie recipe ${n}`,
-  },
+const RecipeListWithQueryClient = () => {
+  const client = new QueryClient();
+
+  return (
+    <QueryClientProvider client={client}>
+      <RecipeList />
+    </QueryClientProvider>
+  );
+};
+
+// Tests setup
+testServerSetup();
+afterEach(() => {
+  queryCache.clear();
 });
-const data = { records: [1, 2, 3].map((n) => createRecipe(n)) };
+
+afterEach(() => {
+  jest.restoreAllMocks();
+});
 
 describe('RecipeList', () => {
   describe('while loading', () => {
     it('render spinner', () => {
-      (useFetchRecipesMock as jest.Mock).mockImplementation(() => ({
-        data: undefined,
-        isLoading: true,
-        isError: false,
-        error: null,
-      }));
-      render(<RecipeList />);
-      const spinner = screen.queryByText(/loading/i);
+      render(<RecipeListWithQueryClient />);
+      const spinner = screen.getByText(/loading/i);
+      const recipeTitle = screen.queryAllByText(/recipe title/i);
+
       expect(spinner).toBeInTheDocument();
+      expect(recipeTitle).toHaveLength(0);
     });
   });
 
   describe('while error', () => {
-    it('display error message', () => {
-      (useFetchRecipesMock as jest.Mock).mockImplementation(() => ({
-        data: undefined,
-        isLoading: false,
-        isError: true,
-        error: { errorMessage: 'Error' },
-      }));
-      render(<RecipeList />);
-      const errorMessage = screen.queryByText(/error/i);
+    it('display error message', async () => {
+      // Switch off logging errors
+      jest.spyOn(console, 'error').mockImplementation(() => jest.fn());
+
+      server.use(
+        rest.get(getUrl('/recipes'), (req, res, ctx) =>
+          res(ctx.status(500), ctx.json({ errorMessage: 'Test Error' }))
+        )
+      );
+
+      render(<RecipeListWithQueryClient />);
+      await waitForElementToBeRemoved(screen.getByText(/loading/i), {
+        timeout: 10000,
+      });
+      const errorMessage = screen.getByText(/error/i);
+
       expect(errorMessage).toBeInTheDocument();
-    });
+    }, 10000);
   });
 
   describe('fetch data successfuly', () => {
-    it('renders a list of recipe cards correctly', () => {
-      (useFetchRecipesMock as jest.Mock).mockImplementation(() => ({
-        data,
-        isLoading: false,
-        isError: false,
-        error: null,
-      }));
-      render(<RecipeList />);
-      const recipes = screen.queryAllByText(/recipe title/i);
-      expect(recipes).toHaveLength(3);
+    it('renders first page of recipes correctly', async () => {
+      render(<RecipeListWithQueryClient />);
+      const recipes = await screen.findAllByTestId('recipe-card');
+      const spinner = screen.queryByText(/loading/i);
+
+      expect(spinner).not.toBeInTheDocument();
+      expect(recipes).toHaveLength(5);
+    });
+
+    it('renders all recipes (two pages) correctly', async () => {
+      const { rerender } = render(<RecipeListWithQueryClient />);
+
+      const loadMoreButton = await screen.findByText(/load more/i);
+
+      user.click(loadMoreButton);
+
+      rerender(<RecipeListWithQueryClient />);
+
+      await waitFor(() =>
+        expect(screen.getAllByTestId('recipe-card')).toHaveLength(6)
+      );
     });
   });
 });

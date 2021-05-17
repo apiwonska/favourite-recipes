@@ -1,0 +1,50 @@
+{
+  "records": [
+    {
+      "id": "recpVs3fZVQpzDjAt",
+      "fields": {
+        "name": "Brownie with peanut butter",
+        "link": "https://www.kwestiasmaku.com/przepis/pyszne-brownie-z-maslem-orzechowym",
+        "categories": ["recNYi3JyKfi5VRR7"]
+      },
+      "createdTime": "2021-04-28T17:34:48.000Z"
+    },
+    {
+      "id": "recnYHTdCbmN44ZSa",
+      "fields": {
+        "name": "Gyros salad",
+        "link": "https://www.kwestiasmaku.com/przepis/salatka-gyros",
+        "categories": ["recYcmp0PJrHhd4yD"]
+      },
+      "createdTime": "2021-04-28T17:34:48.000Z"
+    },
+    {
+      "id": "recUIqDE89ldIhZ1C",
+      "fields": {
+        "name": "Stir-fry with chicken",
+        "link": "https://www.kwestiasmaku.com/przepis/makaron-stir-fry-z-kurczakiem-brokulami-i-marchewka",
+        "categories": ["recZbf8IQEZeFczJC", "rec8nleEIijYfXask"]
+      },
+      "createdTime": "2021-04-28T17:34:48.000Z"
+    },
+    {
+      "id": "recBthKwkOdKOQwg3",
+      "fields": {
+        "name": "Cottage cheese pancakes",
+        "link": "https://www.kwestiasmaku.com/przepis/placki-twarogowe",
+        "categories": ["recFtHrxetyNZteia"]
+      },
+      "createdTime": "2021-04-28T17:37:25.000Z"
+    },
+    {
+      "id": "rec09mfnUW1ANcrLB",
+      "fields": {
+        "name": "Chicken in cream tomatoe sauce",
+        "link": "https://www.kwestiasmaku.com/przepis/kurczak-w-kremowym-sosie-pomidorowo-koperkowym",
+        "categories": ["recZbf8IQEZeFczJC", "recDCSt5cgFhs56tT"]
+      },
+      "createdTime": "2021-04-28T17:37:25.000Z"
+    }
+  ],
+  "offset": "itrDeOAYTnRLnKScW/rec09mfnUW1ANcrLB"
+}

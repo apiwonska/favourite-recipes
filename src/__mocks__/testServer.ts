@@ -1,13 +1,19 @@
 import { setupServer } from 'msw/node';
 import { rest } from 'msw';
 
-import { url as apiUrl } from 'api';
-import data from '__mocks__/validRecipesData';
+import { getUrl } from 'api';
+import dataPage1Json from '__mocks__/validRecipesPage1.json';
+import dataPage2Json from '__mocks__/validRecipesPage2Last.json';
 
 const server = setupServer(
-  rest.get(`${apiUrl}/recipes`, (req, res, ctx) =>
-    res(ctx.status(200), ctx.json(data))
-  ),
+  rest.get(getUrl('/recipes'), (req, res, ctx) => {
+    const offset = req.url.searchParams.get('offset');
+
+    if (offset === 'itrDeOAYTnRLnKScW/rec09mfnUW1ANcrLB') {
+      return res(ctx.status(200), ctx.json(dataPage2Json));
+    }
+    return res(ctx.status(200), ctx.json(dataPage1Json));
+  }),
   rest.get('*', (req, res, ctx) => {
     // eslint-disable-next-line no-console
     console.error(`Missing request handler for ${req.url.toString}`);
