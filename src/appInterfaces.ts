@@ -9,4 +9,5 @@ export interface RecipeInterface {
 
 export interface RecipeDataInterface {
   records: RecipeInterface[];
+  offset?: string;
 }
