@@ -1,0 +1,8 @@
+.recipe-img {
+  height: 170px;
+  object-fit: cover;
+}
+
+.recipe-card {
+  margin: 10px !important;
+}

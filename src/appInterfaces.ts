@@ -4,6 +4,10 @@ export interface RecipeInterface {
     name: string;
     link: string;
     note: string;
+    image: string;
+    locked: boolean;
+    created: string;
+    updated: string;
   };
 }
 

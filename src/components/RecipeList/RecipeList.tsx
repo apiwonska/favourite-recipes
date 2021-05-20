@@ -1,4 +1,5 @@
 import Spinner from 'react-bootstrap/Spinner';
+import CardDeck from 'react-bootstrap/CardDeck';
 import Alert from 'react-bootstrap/Alert';
 import Button from 'react-bootstrap/Button';
 
@@ -19,7 +20,12 @@ const RecipeList: React.FC = () => {
 
   if (isLoading) {
     return (
-      <Spinner animation="border" role="status" variant="secondary">
+      <Spinner
+        animation="border"
+        role="status"
+        variant="secondary"
+        className="my-4"
+      >
         <span className="sr-only">Loading...</span>
       </Spinner>
     );
@@ -38,13 +44,15 @@ const RecipeList: React.FC = () => {
   return (
     <>
       <h2 className="m-5">Your Recipes!</h2>
-      {data?.pages.map((page: RecipeDataInterface) =>
-        page.records.map((recipe: RecipeInterface) => (
-          <RecipeItem key={recipe.id} recipe={recipe.fields} />
-        ))
-      )}
+      <CardDeck>
+        {data?.pages.map((page: RecipeDataInterface) =>
+          page.records.map((recipe: RecipeInterface) => (
+            <RecipeItem key={recipe.id} recipe={recipe.fields} />
+          ))
+        )}
+      </CardDeck>
       <Button
-        variant="primary"
+        variant="secondary"
         onClick={() => fetchNextPage()}
         disabled={!hasNextPage || isFetchingNextPage}
         className=" mt-3 d-flex justify-content-center align-items-center"
