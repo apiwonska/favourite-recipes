@@ -21,9 +21,9 @@ const RecipeItem: React.FC<RecipeItemProps> = ({
         src={image || placeholder}
         className="recipe-img"
       />
-      <Card.Body>
+      <Card.Body className="d-flex flex-column">
         <Card.Title>{name}</Card.Title>
-        <Card.Text>{note}</Card.Text>
+        <Card.Text className="flex-grow-1">{note}</Card.Text>
         <Card.Link href={link} style={{ color: 'blue' }} target="_blank">
           <Icon name={iconEnum.Link} size="1.3em" />
           &nbsp;Go to Recipe

@@ -6,19 +6,22 @@ import {
 } from '@testing-library/react';
 import { QueryClient, QueryClientProvider, QueryCache } from 'react-query';
 import user from '@testing-library/user-event';
+import { MemoryRouter } from 'react-router-dom';
 
 import { testServerSetup, server, rest } from '__mocks__/testServer';
 import { getUrl } from 'api';
-import RecipeList from './RecipeList';
+import HomePage from './HomePage';
 
 const queryCache = new QueryCache();
 
-const RecipeListWithQueryClient = () => {
+const WrappedHomePage: React.FC = () => {
   const client = new QueryClient();
 
   return (
     <QueryClientProvider client={client}>
-      <RecipeList />
+      <MemoryRouter>
+        <HomePage />
+      </MemoryRouter>
     </QueryClientProvider>
   );
 };
@@ -33,10 +36,18 @@ afterEach(() => {
   jest.restoreAllMocks();
 });
 
-describe('RecipeList', () => {
-  describe('while loading', () => {
+describe('HomePage', () => {
+  it('render a link to add new recipe page', async () => {
+    render(<WrappedHomePage />);
+    const addRecipeLink = screen.getByText(/add new recipe/i);
+
+    expect(addRecipeLink).toBeInTheDocument();
+    expect(addRecipeLink).toHaveAttribute('href', '/add');
+  });
+
+  describe('while loading recipes', () => {
     it('render spinner', () => {
-      render(<RecipeListWithQueryClient />);
+      render(<WrappedHomePage />);
       const spinner = screen.getByText(/loading/i);
       const recipeTitle = screen.queryAllByText(/recipe title/i);
 
@@ -45,7 +56,7 @@ describe('RecipeList', () => {
     });
   });
 
-  describe('while error', () => {
+  describe('while error during fetching recipes', () => {
     it('display error message', async () => {
       // Switch off logging errors
       jest.spyOn(console, 'error').mockImplementation(() => jest.fn());
@@ -56,7 +67,7 @@ describe('RecipeList', () => {
         )
       );
 
-      render(<RecipeListWithQueryClient />);
+      render(<WrappedHomePage />);
       await waitForElementToBeRemoved(screen.getByText(/loading/i), {
         timeout: 10000,
       });
@@ -66,9 +77,9 @@ describe('RecipeList', () => {
     }, 10000);
   });
 
-  describe('fetch data successfuly', () => {
+  describe('while fetch recipes successfuly', () => {
     it('renders first page of recipes correctly', async () => {
-      render(<RecipeListWithQueryClient />);
+      render(<WrappedHomePage />);
       const recipes = await screen.findAllByTestId('recipe-card');
       const spinner = screen.queryByText(/loading/i);
 
@@ -77,13 +88,13 @@ describe('RecipeList', () => {
     });
 
     it('renders all recipes (two pages) correctly', async () => {
-      const { rerender } = render(<RecipeListWithQueryClient />);
+      const { rerender } = render(<WrappedHomePage />);
 
       const loadMoreButton = await screen.findByText(/load more/i);
 
       user.click(loadMoreButton);
 
-      rerender(<RecipeListWithQueryClient />);
+      rerender(<WrappedHomePage />);
 
       await waitFor(() =>
         expect(screen.getAllByTestId('recipe-card')).toHaveLength(6)

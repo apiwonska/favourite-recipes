@@ -1,12 +1,21 @@
 import { render, screen } from '@testing-library/react';
 import user from '@testing-library/user-event';
+import { MemoryRouter } from 'react-router-dom';
 
 import dataPage1 from '__mocks__/dataPage1';
 import dataPage2 from '__mocks__/dataPage2Last';
-import RecipeList from './RecipeList';
+import RecipeList from '.';
 import useFetchRecipesMock from './useFetchRecipes';
 
+// Tests in this file are writen solely for learning purposes. Scope of tests overlaps with tests in HomePage.test.tsx file.
+
 jest.mock('./useFetchRecipes', () => jest.fn());
+
+const WrappedRecipeList: React.FC = () => (
+  <MemoryRouter>
+    <RecipeList />
+  </MemoryRouter>
+);
 
 describe('RecipeList', () => {
   describe('while loading', () => {
@@ -20,7 +29,7 @@ describe('RecipeList', () => {
         hasNextPage: undefined,
         isFetchingNextPage: false,
       }));
-      render(<RecipeList />);
+      render(<WrappedRecipeList />);
       const spinner = screen.queryByText(/loading/i);
       expect(spinner).toBeInTheDocument();
     });
@@ -37,7 +46,7 @@ describe('RecipeList', () => {
         hasNextPage: undefined,
         isFetchingNextPage: false,
       }));
-      render(<RecipeList />);
+      render(<WrappedRecipeList />);
       const errorMessage = screen.queryByText(/error/i);
       expect(errorMessage).toBeInTheDocument();
     });
@@ -54,7 +63,7 @@ describe('RecipeList', () => {
         hasNextPage: true,
         isFetchingNextPage: false,
       }));
-      render(<RecipeList />);
+      render(<WrappedRecipeList />);
       const recipes = screen.queryAllByTestId('recipe-card');
 
       expect(recipes).toHaveLength(5);
@@ -71,7 +80,7 @@ describe('RecipeList', () => {
         hasNextPage: true,
         isFetchingNextPage: false,
       }));
-      render(<RecipeList />);
+      render(<WrappedRecipeList />);
       const loadMoreBtn = screen.getByText(/load more/i);
 
       expect(loadMoreBtn).toBeEnabled();
@@ -91,7 +100,7 @@ describe('RecipeList', () => {
         hasNextPage: false,
         isFetchingNextPage: false,
       }));
-      render(<RecipeList />);
+      render(<WrappedRecipeList />);
       const recipes = screen.queryAllByTestId('recipe-card');
       const loadMoreBtn = screen.queryByText(/load more/i);
 

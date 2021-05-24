@@ -35,15 +35,14 @@ const RecipeList: React.FC = () => {
     return (
       <Alert variant="danger">
         {error?.message
-          ? `Error. ${error.message}`
-          : 'Error occured. Please try again later'}
+          ? `Error occured while loading recipes. ${error.message}`
+          : 'Error occured while loading recipes.'}
       </Alert>
     );
   }
 
   return (
     <>
-      <h2 className="m-5">Your Recipes!</h2>
       <CardDeck>
         {data?.pages.map((page: RecipeDataInterface) =>
           page.records.map((recipe: RecipeInterface) => (
