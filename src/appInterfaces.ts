@@ -15,3 +15,12 @@ export interface RecipeDataInterface {
   records: RecipeInterface[];
   offset?: string;
 }
+
+export interface RecipePayloadInterface {
+  fields: {
+    name: string;
+    link: string;
+    note?: string;
+    image?: string;
+  };
+}

@@ -35,6 +35,7 @@ module.exports = {
   ],
   rules: {
     'react/react-in-jsx-scope': 'off',
+    'react/jsx-props-no-spreading': 'off',
     'react/prop-types': 'warn',
     'no-unused-vars': 'warn',
     'arrow-body-style': 'warn',

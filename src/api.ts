@@ -1,6 +1,10 @@
 import axios from 'axios';
 
-import { RecipeDataInterface } from 'appInterfaces';
+import {
+  RecipeDataInterface,
+  RecipeInterface,
+  RecipePayloadInterface,
+} from 'appInterfaces';
 
 const BASE = process.env.REACT_APP_AIRTABLE_BASE_FAVOURITE_RECIPES;
 export const url = `https://api.airtable.com/v0/${BASE}`;
@@ -29,6 +33,17 @@ export const fetchRecipes = async ({
     const res = await axiosInstance.get(
       `/recipes?${recipeViewParams}&pageSize=${pageSize}&offset=${pageParam}`
     );
+    return res.data;
+  } catch (err) {
+    throw new Error(err.message);
+  }
+};
+
+export const addRecipe = async (
+  recipe: RecipePayloadInterface
+): Promise<RecipeInterface> => {
+  try {
+    const res = await axiosInstance.post('/recipes', recipe);
     return res.data;
   } catch (err) {
     throw new Error(err.message);
