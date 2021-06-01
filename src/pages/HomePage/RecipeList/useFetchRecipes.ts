@@ -4,7 +4,7 @@ import {
   InfiniteQueryObserverResult,
   FetchNextPageOptions,
 } from 'react-query';
-import { fetchRecipes } from 'api';
+import { fetchRecipes } from 'apis/recipes';
 import { RecipeDataInterface } from 'appInterfaces';
 
 interface HookReturnValuesInterface {

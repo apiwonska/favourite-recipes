@@ -1,26 +1,16 @@
-import axios from 'axios';
-
 import {
   RecipeDataInterface,
   RecipeInterface,
   RecipePayloadInterface,
+  ApiDeleteRecipeReturnValue,
 } from 'appInterfaces';
+import axiosInstance, { url } from 'apis/recipesAxiosInstance';
 
-const BASE = process.env.REACT_APP_AIRTABLE_BASE_FAVOURITE_RECIPES;
-export const url = `https://api.airtable.com/v0/${BASE}`;
 export const getUrl = (path: string): string => url + path;
 const view = 'view=grid';
 const formula = "filterByFormula=AND(NOT(name+%3D+'')%2C+NOT(link+%3D+''))";
 const sort = 'sort%5B0%5D%5Bfield%5D=created&sort%5B0%5D%5Bdirection%5D=desc';
 const recipeViewParams = `${view}&${formula}&${sort}`;
-
-const axiosInstance = axios.create({
-  baseURL: url,
-  timeout: 1000,
-  headers: {
-    Authorization: `Bearer ${process.env.REACT_APP_AIRTABLE_API_KEY}`,
-  },
-});
 
 export const fetchRecipes = async ({
   pageParam = '',
@@ -40,10 +30,21 @@ export const fetchRecipes = async ({
 };
 
 export const addRecipe = async (
-  recipe: RecipePayloadInterface
+  recipeData: RecipePayloadInterface
 ): Promise<RecipeInterface> => {
   try {
-    const res = await axiosInstance.post('/recipes', recipe);
+    const res = await axiosInstance.post('/recipes', recipeData);
+    return res.data;
+  } catch (err) {
+    throw new Error(err.message);
+  }
+};
+
+export const deleteRecipe = async (
+  recipeId: string
+): Promise<ApiDeleteRecipeReturnValue> => {
+  try {
+    const res = await axiosInstance.delete(`/recipes/${recipeId}`);
     return res.data;
   } catch (err) {
     throw new Error(err.message);

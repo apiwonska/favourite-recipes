@@ -46,7 +46,11 @@ const RecipeList: React.FC = () => {
       <CardDeck>
         {data?.pages.map((page: RecipeDataInterface) =>
           page.records.map((recipe: RecipeInterface) => (
-            <RecipeItem key={recipe.id} recipe={recipe.fields} />
+            <RecipeItem
+              key={recipe.id}
+              recipe={recipe.fields}
+              recipeId={recipe.id}
+            />
           ))
         )}
       </CardDeck>
