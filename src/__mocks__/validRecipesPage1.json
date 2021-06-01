@@ -4,8 +4,13 @@
       "id": "recpVs3fZVQpzDjAt",
       "fields": {
         "name": "Brownie with peanut butter",
+        "image": "https://www.kwestiasmaku.com/sites/v123.kwestiasmaku.com/files/brownie_z_maslem_orzechowym_0.jpg",
         "link": "https://www.kwestiasmaku.com/przepis/pyszne-brownie-z-maslem-orzechowym",
-        "categories": ["recNYi3JyKfi5VRR7"]
+        "categories": ["recNYi3JyKfi5VRR7"],
+        "locked": true,
+        "note": "Bake in 180C for 40min. 25cm baking mold.",
+        "created": "2021-04-28T17:34:48.000Z",
+        "updated": "2021-05-18T07:34:21.000Z"
       },
       "createdTime": "2021-04-28T17:34:48.000Z"
     },
@@ -13,8 +18,13 @@
       "id": "recnYHTdCbmN44ZSa",
       "fields": {
         "name": "Gyros salad",
+        "image": "https://www.kwestiasmaku.com/sites/v123.kwestiasmaku.com/files/salatka_gyros.jpg",
         "link": "https://www.kwestiasmaku.com/przepis/salatka-gyros",
-        "categories": ["recYcmp0PJrHhd4yD"]
+        "categories": ["recYcmp0PJrHhd4yD"],
+        "locked": true,
+        "note": "Great\n for party!",
+        "created": "2021-04-28T17:34:48.000Z",
+        "updated": "2021-05-18T07:34:22.000Z"
       },
       "createdTime": "2021-04-28T17:34:48.000Z"
     },
@@ -22,8 +32,13 @@
       "id": "recUIqDE89ldIhZ1C",
       "fields": {
         "name": "Stir-fry with chicken",
+        "image": "https://www.kwestiasmaku.com/sites/v123.kwestiasmaku.com/files/makaron_stir_fry.jpg",
         "link": "https://www.kwestiasmaku.com/przepis/makaron-stir-fry-z-kurczakiem-brokulami-i-marchewka",
-        "categories": ["recZbf8IQEZeFczJC", "rec8nleEIijYfXask"]
+        "categories": ["recZbf8IQEZeFczJC", "rec8nleEIijYfXask"],
+        "locked": true,
+        "note": "Mike's favourite",
+        "created": "2021-04-28T17:34:48.000Z",
+        "updated": "2021-05-18T07:34:22.000Z"
       },
       "createdTime": "2021-04-28T17:34:48.000Z"
     },
@@ -31,8 +46,13 @@
       "id": "recBthKwkOdKOQwg3",
       "fields": {
         "name": "Cottage cheese pancakes",
+        "image": "https://www.kwestiasmaku.com/sites/v123.kwestiasmaku.com/files/placki-twarogowe-01.jpg",
         "link": "https://www.kwestiasmaku.com/przepis/placki-twarogowe",
-        "categories": ["recFtHrxetyNZteia"]
+        "categories": ["recFtHrxetyNZteia"],
+        "locked": true,
+        "note": "Serve with honey\n",
+        "created": "2021-04-28T17:37:25.000Z",
+        "updated": "2021-05-18T07:34:23.000Z"
       },
       "createdTime": "2021-04-28T17:37:25.000Z"
     },
@@ -40,11 +60,28 @@
       "id": "rec09mfnUW1ANcrLB",
       "fields": {
         "name": "Chicken in cream tomatoe sauce",
+        "image": "https://www.kwestiasmaku.com/sites/v123.kwestiasmaku.com/files/kurczak_w_kremowym_sosie_pomidorowo_koperkowym.jpg",
         "link": "https://www.kwestiasmaku.com/przepis/kurczak-w-kremowym-sosie-pomidorowo-koperkowym",
-        "categories": ["recZbf8IQEZeFczJC", "recDCSt5cgFhs56tT"]
+        "categories": ["recZbf8IQEZeFczJC", "recDCSt5cgFhs56tT"],
+        "locked": true,
+        "created": "2021-04-28T17:37:25.000Z",
+        "updated": "2021-05-19T12:48:43.000Z"
+      },
+      "createdTime": "2021-04-28T17:37:25.000Z"
+    },
+    {
+      "id": "recjYZiVwJkVlI1Ih",
+      "fields": {
+        "name": "Hoisin chicken",
+        "image": "https://www.kwestiasmaku.com/sites/v123.kwestiasmaku.com/files/kurczak-hoisin.jpg",
+        "link": "https://www.kwestiasmaku.com/przepis/kurczak-hoisin",
+        "categories": ["recZbf8IQEZeFczJC", "rec8nleEIijYfXask"],
+        "locked": true,
+        "created": "2021-04-28T17:37:25.000Z",
+        "updated": "2021-05-19T12:48:13.000Z"
       },
       "createdTime": "2021-04-28T17:37:25.000Z"
     }
   ],
-  "offset": "itrDeOAYTnRLnKScW/rec09mfnUW1ANcrLB"
+  "offset": "itrrcJvxRJLCIqnhQ/recjYZiVwJkVlI1Ih"
 }

@@ -1,13 +1,18 @@
 {
   "records": [
     {
-      "id": "recjYZiVwJkVlI1Ih",
+      "id": "recBMG6XFgCHh2u0j",
       "fields": {
-        "name": "Hoisin chicken",
-        "link": "https://www.kwestiasmaku.com/przepis/kurczak-hoisin",
-        "categories": ["recZbf8IQEZeFczJC", "rec8nleEIijYfXask"]
+        "name": "Asian soup with chicken",
+        "image": "https://www.kwestiasmaku.com/sites/v123.kwestiasmaku.com/files/styles/zdjecie_glowne/public/zupa-azjatycka-z-kurczakiem.jpg?itok=WBVB8Q-F",
+        "link": "https://www.kwestiasmaku.com/przepis/zupa-azjatycka-z-kurczakiem",
+        "categories": ["recDCSt5cgFhs56tT", "recZbf8IQEZeFczJC"],
+        "locked": true,
+        "created": "2021-04-28T17:37:25.000Z",
+        "updated": "2021-05-19T12:50:16.000Z"
       },
       "createdTime": "2021-04-28T17:37:25.000Z"
     }
-  ]
+  ],
+  "offset": "itrrcJvxRJLCIqnhQ/recBMG6XFgCHh2u0j"
 }

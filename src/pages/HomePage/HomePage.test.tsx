@@ -4,27 +4,21 @@ import {
   waitFor,
   waitForElementToBeRemoved,
 } from '@testing-library/react';
-import { QueryClient, QueryClientProvider, QueryCache } from 'react-query';
+import { QueryCache } from 'react-query';
 import user from '@testing-library/user-event';
-import { MemoryRouter } from 'react-router-dom';
 
 import { testServerSetup, server, rest } from '__mocks__/testServer';
-import { getUrl } from 'api';
+import { getUrl } from 'apis/recipes';
+import { TestWrapper } from 'shared/testUtils';
 import HomePage from './HomePage';
 
 const queryCache = new QueryCache();
 
-const WrappedHomePage: React.FC = () => {
-  const client = new QueryClient();
-
-  return (
-    <QueryClientProvider client={client}>
-      <MemoryRouter>
-        <HomePage />
-      </MemoryRouter>
-    </QueryClientProvider>
-  );
-};
+const WrappedHomePage: React.FC = () => (
+  <TestWrapper>
+    <HomePage />
+  </TestWrapper>
+);
 
 // Tests setup
 testServerSetup();
@@ -37,12 +31,14 @@ afterEach(() => {
 });
 
 describe('HomePage', () => {
-  it('render a link to add new recipe page', async () => {
-    render(<WrappedHomePage />);
-    const addRecipeLink = screen.getByText(/add new recipe/i);
+  describe('initial state', () => {
+    it('render a link to add new recipe page', async () => {
+      render(<WrappedHomePage />);
+      const addRecipeLink = screen.getByText(/add new recipe/i);
 
-    expect(addRecipeLink).toBeInTheDocument();
-    expect(addRecipeLink).toHaveAttribute('href', '/add');
+      expect(addRecipeLink).toBeInTheDocument();
+      expect(addRecipeLink).toHaveAttribute('href', '/add');
+    });
   });
 
   describe('while loading recipes', () => {
@@ -84,7 +80,7 @@ describe('HomePage', () => {
       const spinner = screen.queryByText(/loading/i);
 
       expect(spinner).not.toBeInTheDocument();
-      expect(recipes).toHaveLength(5);
+      expect(recipes).toHaveLength(6);
     });
 
     it('renders all recipes (two pages) correctly', async () => {
@@ -96,8 +92,9 @@ describe('HomePage', () => {
 
       rerender(<WrappedHomePage />);
 
+      // If it returns different number of cards check offset values for handler in testServer
       await waitFor(() =>
-        expect(screen.getAllByTestId('recipe-card')).toHaveLength(6)
+        expect(screen.getAllByTestId('recipe-card')).toHaveLength(7)
       );
     });
   });

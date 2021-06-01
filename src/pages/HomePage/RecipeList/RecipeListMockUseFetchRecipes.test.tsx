@@ -1,9 +1,9 @@
 import { render, screen } from '@testing-library/react';
 import user from '@testing-library/user-event';
-import { MemoryRouter } from 'react-router-dom';
 
 import dataPage1 from '__mocks__/dataPage1';
 import dataPage2 from '__mocks__/dataPage2Last';
+import { TestWrapper } from 'shared/testUtils';
 import RecipeList from '.';
 import useFetchRecipesMock from './useFetchRecipes';
 
@@ -12,9 +12,9 @@ import useFetchRecipesMock from './useFetchRecipes';
 jest.mock('./useFetchRecipes', () => jest.fn());
 
 const WrappedRecipeList: React.FC = () => (
-  <MemoryRouter>
+  <TestWrapper>
     <RecipeList />
-  </MemoryRouter>
+  </TestWrapper>
 );
 
 describe('RecipeList', () => {
@@ -66,7 +66,7 @@ describe('RecipeList', () => {
       render(<WrappedRecipeList />);
       const recipes = screen.queryAllByTestId('recipe-card');
 
-      expect(recipes).toHaveLength(5);
+      expect(recipes).toHaveLength(6);
     });
 
     it('call fetchNextPage after clicking "load more" button', () => {
@@ -104,7 +104,7 @@ describe('RecipeList', () => {
       const recipes = screen.queryAllByTestId('recipe-card');
       const loadMoreBtn = screen.queryByText(/load more/i);
 
-      expect(recipes).toHaveLength(6);
+      expect(recipes).toHaveLength(7);
       expect(loadMoreBtn).toBeDisabled();
     });
   });
