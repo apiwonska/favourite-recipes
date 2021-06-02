@@ -1,4 +1,4 @@
-import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
+import { Switch, Route, Redirect } from 'react-router-dom';
 
 import PageLayout from 'layout/PageLayout';
 import HomePage from 'pages/HomePage';
@@ -8,13 +8,12 @@ import UpdateRecipePage from 'pages/UpdateRecipePage';
 function App(): JSX.Element {
   return (
     <PageLayout>
-      <Router>
-        <Switch>
-          <Route path="/" component={HomePage} exact />
-          <Route path="/add" component={AddRecipePage} exact />
-          <Route path="/update/:recipeId" component={UpdateRecipePage} exact />
-        </Switch>
-      </Router>
+      <Switch>
+        <Route path="/" component={HomePage} exact />
+        <Route path="/add" component={AddRecipePage} exact />
+        <Route path="/update/:recipeId" component={UpdateRecipePage} exact />
+        <Route path="*" render={() => <Redirect to="/" />} />
+      </Switch>
     </PageLayout>
   );
 }

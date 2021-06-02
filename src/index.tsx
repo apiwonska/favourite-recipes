@@ -1,6 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { QueryClient, QueryClientProvider } from 'react-query';
+import { BrowserRouter as Router } from 'react-router-dom';
 
 import 'bootstrap/dist/css/bootstrap.min.css';
 // eslint-disable-next-line
@@ -13,7 +14,9 @@ const client = new QueryClient();
 ReactDOM.render(
   <React.StrictMode>
     <QueryClientProvider client={client}>
-      <App />
+      <Router>
+        <App />
+      </Router>
     </QueryClientProvider>
   </React.StrictMode>,
   document.getElementById('root')
