@@ -10,24 +10,22 @@ import Button from 'react-bootstrap/Button';
 import Alert from 'react-bootstrap/Alert';
 import Spinner from 'react-bootstrap/Spinner';
 
-import {
-  RecipeInterface,
-  // RecipePayloadInterface,
-  // AddRecipeFormDataInterface as FormData,
-} from 'appInterfaces';
+import { RecipeInterface } from 'appInterfaces';
 
 export interface FormData {
   name: string;
   note: string;
   link: string;
   image: string;
+  [key: string]: string;
 }
 
-interface AddRecipeFormProps {
+interface UpdateRecipeFormProps {
+  recipeData: RecipeInterface;
   mutateAsync: UseMutateAsyncFunction<
     RecipeInterface,
     unknown,
-    FormData,
+    { recipeId: string; recipeFormData: FormData },
     unknown
   >;
   isLoading: boolean;
@@ -40,22 +38,30 @@ const schema = yup.object().shape({
   image: yup.string().trim().url(),
 });
 
-const AddRecipeForm: React.FC<AddRecipeFormProps> = ({
+const UpdateRecipeForm: React.FC<UpdateRecipeFormProps> = ({
+  recipeData,
   mutateAsync,
   isLoading,
 }) => {
+  const defaultFormValues: FormData = {
+    name: recipeData.fields.name,
+    note: recipeData.fields.note || '',
+    link: recipeData.fields.link,
+    image: recipeData.fields.image || '',
+  };
+
   const {
     register,
     handleSubmit,
     formState: { errors },
-    reset,
     setFocus,
   } = useForm<FormData>({
-    mode: 'onSubmit',
-    reValidateMode: 'onChange',
+    mode: 'onChange',
+    defaultValues: defaultFormValues,
     resolver: yupResolver(schema),
   });
   const history = useHistory();
+  const { id: recipeId } = recipeData;
 
   useEffect(() => {
     setFocus('name');
@@ -66,8 +72,7 @@ const AddRecipeForm: React.FC<AddRecipeFormProps> = ({
       <Form
         name="add-recipe"
         onSubmit={handleSubmit(async (data) => {
-          await mutateAsync(data);
-          reset();
+          await mutateAsync({ recipeId, recipeFormData: data });
         })}
       >
         <Form.Group controlId="ar-name">
@@ -134,15 +139,6 @@ const AddRecipeForm: React.FC<AddRecipeFormProps> = ({
         </Form.Group>
         <div className="text-right">
           <Button
-            variant="secondary"
-            onClick={() => {
-              history.goBack();
-            }}
-            className="m-2"
-          >
-            Cancel
-          </Button>
-          <Button
             variant="warning"
             type="submit"
             disabled={isLoading}
@@ -158,7 +154,16 @@ const AddRecipeForm: React.FC<AddRecipeFormProps> = ({
                 className="mr-2"
               />
             )}
-            Submit Recipe
+            Save Recipe
+          </Button>
+          <Button
+            variant="secondary"
+            onClick={() => {
+              history.goBack();
+            }}
+            className="m-2"
+          >
+            Cancel
           </Button>
         </div>
       </Form>
@@ -166,4 +171,4 @@ const AddRecipeForm: React.FC<AddRecipeFormProps> = ({
   );
 };
 
-export default AddRecipeForm;
+export default UpdateRecipeForm;
