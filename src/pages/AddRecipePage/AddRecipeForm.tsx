@@ -10,26 +10,17 @@ import Button from 'react-bootstrap/Button';
 import Alert from 'react-bootstrap/Alert';
 import Spinner from 'react-bootstrap/Spinner';
 
-import {
-  RecipeInterface,
-  // RecipePayloadInterface,
-  // AddRecipeFormDataInterface as FormData,
-} from 'appInterfaces';
+import { IRecipe } from 'appInterfaces';
 
-export interface FormData {
+export interface IFormData {
   name: string;
   note: string;
   link: string;
   image: string;
 }
 
-interface AddRecipeFormProps {
-  mutateAsync: UseMutateAsyncFunction<
-    RecipeInterface,
-    unknown,
-    FormData,
-    unknown
-  >;
+interface IAddRecipeFormProps {
+  mutateAsync: UseMutateAsyncFunction<IRecipe, unknown, IFormData, unknown>;
   isLoading: boolean;
 }
 
@@ -40,7 +31,7 @@ const schema = yup.object().shape({
   image: yup.string().trim().url(),
 });
 
-const AddRecipeForm: React.FC<AddRecipeFormProps> = ({
+const AddRecipeForm: React.FC<IAddRecipeFormProps> = ({
   mutateAsync,
   isLoading,
 }) => {
@@ -50,7 +41,7 @@ const AddRecipeForm: React.FC<AddRecipeFormProps> = ({
     formState: { errors },
     reset,
     setFocus,
-  } = useForm<FormData>({
+  } = useForm<IFormData>({
     mode: 'onSubmit',
     reValidateMode: 'onChange',
     resolver: yupResolver(schema),

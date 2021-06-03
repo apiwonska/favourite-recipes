@@ -3,7 +3,7 @@ import CardDeck from 'react-bootstrap/CardDeck';
 import Alert from 'react-bootstrap/Alert';
 import Button from 'react-bootstrap/Button';
 
-import { RecipeInterface, RecipeDataInterface } from 'appInterfaces';
+import { IRecipe, IRecipeData } from 'appInterfaces';
 import RecipeItem from '../RecipeItem';
 import useFetchRecipes from './useFetchRecipes';
 
@@ -44,8 +44,8 @@ const RecipeList: React.FC = () => {
   return (
     <>
       <CardDeck>
-        {data?.pages.map((page: RecipeDataInterface) =>
-          page.records.map((recipe: RecipeInterface) => (
+        {data?.pages.map((page: IRecipeData) =>
+          page.records.map((recipe: IRecipe) => (
             <RecipeItem
               key={recipe.id}
               recipe={recipe.fields}

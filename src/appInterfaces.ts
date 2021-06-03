@@ -1,4 +1,4 @@
-export interface RecipeInterface {
+export interface IRecipe {
   id: string;
   fields: {
     name: string;
@@ -11,12 +11,7 @@ export interface RecipeInterface {
   };
 }
 
-export interface RecipeDataInterface {
-  records: RecipeInterface[];
+export interface IRecipeData {
+  records: IRecipe[];
   offset?: string;
-}
-
-export interface ApiDeleteRecipeReturnValue {
-  deleted: boolean;
-  id: string;
 }

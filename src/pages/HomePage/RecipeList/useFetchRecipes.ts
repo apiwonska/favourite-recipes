@@ -5,21 +5,21 @@ import {
   FetchNextPageOptions,
 } from 'react-query';
 import { fetchRecipes } from 'apis/recipes';
-import { RecipeDataInterface } from 'appInterfaces';
+import { IRecipeData } from 'appInterfaces';
 
-interface HookReturnValuesInterface {
-  data: InfiniteData<RecipeDataInterface> | undefined;
+interface IHookReturn {
+  data: InfiniteData<IRecipeData> | undefined;
   isLoading: boolean;
   isError: boolean;
   error: Error | null;
   fetchNextPage: (
     options?: FetchNextPageOptions | undefined
-  ) => Promise<InfiniteQueryObserverResult<RecipeDataInterface, Error>>;
+  ) => Promise<InfiniteQueryObserverResult<IRecipeData, Error>>;
   hasNextPage: boolean | undefined;
   isFetchingNextPage: boolean;
 }
 
-export const useFetchRecipes = (): HookReturnValuesInterface => {
+export const useFetchRecipes = (): IHookReturn => {
   const {
     data,
     isLoading,
@@ -28,7 +28,7 @@ export const useFetchRecipes = (): HookReturnValuesInterface => {
     fetchNextPage,
     hasNextPage,
     isFetchingNextPage,
-  } = useInfiniteQuery<RecipeDataInterface, Error>('recipes', fetchRecipes, {
+  } = useInfiniteQuery<IRecipeData, Error>('recipes', fetchRecipes, {
     getNextPageParam: (lastPage) => lastPage.offset,
   });
   return {

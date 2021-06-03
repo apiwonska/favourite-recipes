@@ -12,6 +12,7 @@ import useTitle from 'shared/useTitle';
 import Form from './UpdateRecipeForm';
 
 const UpdateRecipe: React.FC = () => {
+  useTitle('Update Recipe');
   const { recipeId } = useParams<{ recipeId: string }>();
   const linkRef = useRef<HTMLAnchorElement>(null);
 
@@ -19,7 +20,7 @@ const UpdateRecipe: React.FC = () => {
     ['recipe', recipeId],
     () => fetchRecipe(recipeId)
   );
-  // console.log(data);
+
   const {
     mutateAsync,
     isLoading: isUpdating,
@@ -31,7 +32,6 @@ const UpdateRecipe: React.FC = () => {
       if (linkRef.current) linkRef.current.focus();
     },
   });
-  useTitle('Update Recipe');
 
   return (
     <Container>

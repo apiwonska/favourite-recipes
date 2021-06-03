@@ -5,18 +5,18 @@ import Button from 'react-bootstrap/Button';
 import Col from 'react-bootstrap/Col';
 import Spinner from 'react-bootstrap/Spinner';
 import Icon, { iconEnum } from 'assets/Icon';
-import { RecipeInterface } from 'appInterfaces';
+import { IRecipe } from 'appInterfaces';
 import placeholder from 'assets/heather-ford-_U4F6pyOQRs-unsplash.jpg';
 
 import { deleteRecipe } from 'apis/recipes';
 import './RecipeItem.css';
 
-export interface RecipeItemProps {
+export interface IRecipeItemProps {
   recipeId: string;
-  recipe: RecipeInterface['fields'];
+  recipe: IRecipe['fields'];
 }
 
-const RecipeItem: React.FC<RecipeItemProps> = ({
+const RecipeItem: React.FC<IRecipeItemProps> = ({
   recipeId,
   recipe: { name, note, image, link, locked },
 }) => {

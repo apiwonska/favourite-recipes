@@ -1,10 +1,6 @@
-import {
-  RecipeDataInterface,
-  RecipeInterface,
-  ApiDeleteRecipeReturnValue,
-} from 'appInterfaces';
-import { FormData as AddRecipeFormData } from 'pages/AddRecipePage/AddRecipeForm';
-import { FormData as UpdateRecipeFormData } from 'pages/UpdateRecipePage/UpdateRecipeForm';
+import { IRecipeData, IRecipe } from 'appInterfaces';
+import { IFormData as IAddRecipeFormData } from 'pages/AddRecipePage/AddRecipeForm';
+import { IFormData as IUpdateRecipeFormData } from 'pages/UpdateRecipePage/UpdateRecipeForm';
 import axiosInstance, { url } from 'apis/recipesAxiosInstance';
 
 export const getUrl = (path: string): string => url + path;
@@ -13,9 +9,7 @@ const formula = "filterByFormula=AND(NOT(name+%3D+'')%2C+NOT(link+%3D+''))";
 const sort = 'sort%5B0%5D%5Bfield%5D=created&sort%5B0%5D%5Bdirection%5D=desc';
 const recipeViewParams = `${view}&${formula}&${sort}`;
 
-export const fetchRecipe = async (
-  recipeId: string
-): Promise<RecipeInterface> => {
+export const fetchRecipe = async (recipeId: string): Promise<IRecipe> => {
   try {
     const res = await axiosInstance.get(`/recipes/${recipeId}`);
     return res.data;
@@ -28,7 +22,7 @@ export const fetchRecipes = async ({
   pageParam = '',
 }: {
   pageParam?: string;
-}): Promise<RecipeDataInterface> => {
+}): Promise<IRecipeData> => {
   const pageSize = 6;
 
   try {
@@ -42,8 +36,8 @@ export const fetchRecipes = async ({
 };
 
 export const addRecipe = async (
-  recipeFormData: AddRecipeFormData
-): Promise<RecipeInterface> => {
+  recipeFormData: IAddRecipeFormData
+): Promise<IRecipe> => {
   try {
     const data = { fields: recipeFormData };
     const res = await axiosInstance.post('/recipes', data);
@@ -58,8 +52,8 @@ export const updateRecipe = async ({
   recipeFormData,
 }: {
   recipeId: string;
-  recipeFormData: UpdateRecipeFormData;
-}): Promise<RecipeInterface> => {
+  recipeFormData: IUpdateRecipeFormData;
+}): Promise<IRecipe> => {
   try {
     const data = { fields: recipeFormData };
     const res = await axiosInstance.patch(`/recipes/${recipeId}`, data);
@@ -69,9 +63,14 @@ export const updateRecipe = async ({
   }
 };
 
+export interface IDeleteRecipeReturn {
+  deleted: boolean;
+  id: string;
+}
+
 export const deleteRecipe = async (
   recipeId: string
-): Promise<ApiDeleteRecipeReturnValue> => {
+): Promise<IDeleteRecipeReturn> => {
   try {
     const res = await axiosInstance.delete(`/recipes/${recipeId}`);
     return res.data;
