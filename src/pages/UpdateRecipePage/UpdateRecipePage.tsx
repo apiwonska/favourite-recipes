@@ -5,6 +5,7 @@ import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import Alert from 'react-bootstrap/Alert';
+import Spinner from 'react-bootstrap/Spinner';
 
 import Icon, { iconEnum } from 'assets/Icon';
 import { fetchRecipe, updateRecipe } from 'apis/recipes';
@@ -16,10 +17,12 @@ const UpdateRecipe: React.FC = () => {
   const { recipeId } = useParams<{ recipeId: string }>();
   const linkRef = useRef<HTMLAnchorElement>(null);
 
-  const { data, isError: isQueryError, isSuccess: isQuerySuccess } = useQuery(
-    ['recipe', recipeId],
-    () => fetchRecipe(recipeId)
-  );
+  const {
+    data,
+    isLoading: isFetching,
+    isError: isQueryError,
+    isSuccess: isQuerySuccess,
+  } = useQuery(['recipe', recipeId], () => fetchRecipe(recipeId));
 
   const {
     mutateAsync,
@@ -48,7 +51,21 @@ const UpdateRecipe: React.FC = () => {
 
       <Row className="justify-content-center">
         <Col className="col-lg-8 my-4 text-left">
-          <h2 className=" mb-5 text-center">Update New Recipe</h2>
+          <h2 className=" mb-5 text-center">Update Recipe</h2>
+
+          {isFetching && (
+            <Row className="flex justify-content-center">
+              {' '}
+              <Spinner
+                animation="border"
+                role="status"
+                variant="secondary"
+                className="my-4 align-self-center"
+              >
+                <span className="sr-only">Loading...</span>
+              </Spinner>
+            </Row>
+          )}
 
           {isUpdateSuccess && (
             <Alert variant="success">Recipe was saved!</Alert>

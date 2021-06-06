@@ -13,11 +13,11 @@ jest.mock('pages/HomePage', () => () => <div>Home Page</div>);
 jest.mock('pages/AddRecipePage', () => () => <div>Add Recipe Page</div>);
 jest.mock('pages/UpdateRecipePage', () => () => <div>Update Recipe Page</div>);
 
-interface WrappedAppProps {
+interface IWrappedAppProps {
   route: string;
 }
 
-const WrappedApp: React.FC<WrappedAppProps> = ({ route }) => (
+const WrappedApp: React.FC<IWrappedAppProps> = ({ route }) => (
   <MemoryRouter initialEntries={[route]}>
     <App />
   </MemoryRouter>

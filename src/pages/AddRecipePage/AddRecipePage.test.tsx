@@ -27,6 +27,11 @@ afterEach(() => {
 
 describe('AddRecipePage', () => {
   describe('page layout and initial form state', () => {
+    it('page title is correct', () => {
+      render(<WrappedAddRecipePage />);
+      expect(document.title).toContain('Favourite Recipes | Add New Recipe');
+    });
+
     it('renders all form elements correctly', () => {
       render(<WrappedAddRecipePage />);
       const form = screen.getByRole('form');

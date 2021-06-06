@@ -1,14 +1,25 @@
 /* eslint-disable react/jsx-props-no-spreading */
 
-import { MemoryRouter } from 'react-router-dom';
+import { Router } from 'react-router-dom';
+import { createMemoryHistory } from 'history';
 import { QueryClientProvider, QueryClient } from 'react-query';
 
-export const TestWrapper: React.FC = ({ children }) => {
+interface ITestWrapperProps {
+  children: React.ReactNode;
+  route?: string;
+}
+
+export const TestWrapper: React.FC<ITestWrapperProps> = ({
+  children,
+  route = '/',
+}) => {
   const client = new QueryClient();
+  const history = createMemoryHistory();
+  history.push(route);
 
   return (
     <QueryClientProvider client={client}>
-      <MemoryRouter>{children}</MemoryRouter>
+      <Router history={history}>{children}</Router>
     </QueryClientProvider>
   );
 };

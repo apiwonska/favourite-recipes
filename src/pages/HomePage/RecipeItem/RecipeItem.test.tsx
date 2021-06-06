@@ -5,7 +5,7 @@ import { TestWrapper } from 'shared/testUtils';
 
 import recipeData from '__mocks__/validRecipe.json';
 import axiosInstance from 'apis/recipesAxiosInstance';
-import RecipeItem, { RecipeItemProps } from './RecipeItem';
+import RecipeItem, { IRecipeItemProps } from './RecipeItem';
 
 const mockHistoryPush = jest.fn();
 jest.mock('react-router-dom', () => ({
@@ -21,7 +21,7 @@ jest.mock('apis/recipesAxiosInstance', () => ({
 
 window.confirm = jest.fn();
 
-const WrappedRecipeItem: React.FC<RecipeItemProps> = ({ ...props }) => (
+const WrappedRecipeItem: React.FC<IRecipeItemProps> = ({ ...props }) => (
   <TestWrapper>
     <RecipeItem {...props} />
   </TestWrapper>

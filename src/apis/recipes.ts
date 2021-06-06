@@ -56,7 +56,7 @@ export const updateRecipe = async ({
 }): Promise<IRecipe> => {
   try {
     const data = { fields: recipeFormData };
-    const res = await axiosInstance.patch(`/recipes/${recipeId}`, data);
+    const res = await axiosInstance.put(`/recipes/${recipeId}`, data);
     return res.data;
   } catch (err) {
     throw new Error(err.message);
