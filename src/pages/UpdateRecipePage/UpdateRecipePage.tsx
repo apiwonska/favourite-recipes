@@ -28,7 +28,6 @@ const UpdateRecipe: React.FC = () => {
     mutateAsync,
     isLoading: isUpdating,
     isError: isUpdateError,
-    isSuccess: isUpdateSuccess,
   } = useMutation(updateRecipe, {
     retry: 1,
     onSuccess: () => {
@@ -65,10 +64,6 @@ const UpdateRecipe: React.FC = () => {
                 <span className="sr-only">Loading...</span>
               </Spinner>
             </Row>
-          )}
-
-          {isUpdateSuccess && (
-            <Alert variant="success">Recipe was saved!</Alert>
           )}
 
           {isQueryError ||

@@ -53,8 +53,9 @@ const UpdateRecipeForm: React.FC<IUpdateRecipeFormProps> = ({
   const {
     register,
     handleSubmit,
-    formState: { errors },
+    formState: { errors, isSubmitSuccessful, isDirty },
     setFocus,
+    reset,
   } = useForm<IFormData>({
     mode: 'onChange',
     defaultValues: defaultFormValues,
@@ -69,10 +70,18 @@ const UpdateRecipeForm: React.FC<IUpdateRecipeFormProps> = ({
 
   return (
     <>
+      {isSubmitSuccessful && !isDirty && (
+        <Alert variant="success">Recipe was saved!</Alert>
+      )}
+
       <Form
         name="add-recipe"
         onSubmit={handleSubmit(async (data) => {
           await mutateAsync({ recipeId, recipeFormData: data });
+          reset(undefined, {
+            keepDirty: false,
+            keepValues: true,
+          });
         })}
       >
         <Form.Group controlId="ar-name">
