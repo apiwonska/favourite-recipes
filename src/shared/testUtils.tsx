@@ -9,13 +9,17 @@ interface ITestWrapperProps {
   route?: string;
 }
 
+const history = createMemoryHistory();
+
 export const TestWrapper: React.FC<ITestWrapperProps> = ({
   children,
-  route = '/',
+  route,
 }) => {
   const client = new QueryClient();
-  const history = createMemoryHistory();
-  history.push(route);
+
+  if (route) {
+    history.push(route);
+  }
 
   return (
     <QueryClientProvider client={client}>

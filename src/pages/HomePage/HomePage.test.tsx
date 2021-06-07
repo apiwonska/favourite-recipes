@@ -31,14 +31,14 @@ afterEach(() => {
 });
 
 describe('HomePage', () => {
-  describe('initial state', () => {
-    it('render a link to add new recipe page', async () => {
-      render(<WrappedHomePage />);
-      const addRecipeLink = screen.getByText(/add new recipe/i);
+  it('render permanent elements of the page', async () => {
+    render(<WrappedHomePage />);
+    const addRecipeLink = screen.getByText(/add new recipe/i);
+    const pageHeader = screen.getByRole('heading', { level: 2 });
 
-      expect(addRecipeLink).toBeInTheDocument();
-      expect(addRecipeLink).toHaveAttribute('href', '/add');
-    });
+    expect(addRecipeLink).toBeInTheDocument();
+    expect(addRecipeLink).toHaveAttribute('href', '/add');
+    expect(pageHeader).toHaveTextContent('Your Recipes');
   });
 
   describe('while loading recipes', () => {
