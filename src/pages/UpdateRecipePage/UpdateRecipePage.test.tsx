@@ -11,8 +11,8 @@ import { Route } from 'react-router-dom';
 import { testServerSetup, server, rest } from '__mocks__/testServer';
 import { TestWrapper, getString } from 'shared/testUtils';
 import { getUrl } from 'apis/recipes';
-import validRecipe from '__mocks__/validRecipe.json';
-import validRecipeUpdated from '__mocks__/validRecipeUpdated.json';
+import recipeJson from '__mocks__/recipe.json';
+import recipeUpdatedJson from '__mocks__/recipeUpdated.json';
 import UpdateRecipePage from './UpdateRecipePage';
 
 const WrappedUpdateRecipePage: React.FC = () => (
@@ -50,10 +50,10 @@ describe('UpdateRecipePage', () => {
       const cancelButton = screen.getByRole('button', { name: /cancel/i });
 
       expect(form).toBeInTheDocument();
-      expect(nameInput).toHaveValue(validRecipe.fields.name);
-      expect(linkInput).toHaveValue(validRecipe.fields.link);
-      expect(imageInput).toHaveValue(validRecipe.fields.image);
-      expect(noteInput).toHaveValue(validRecipe.fields.note);
+      expect(nameInput).toHaveValue(recipeJson.fields.name);
+      expect(linkInput).toHaveValue(recipeJson.fields.link);
+      expect(imageInput).toHaveValue(recipeJson.fields.image);
+      expect(noteInput).toHaveValue(recipeJson.fields.note);
       expect(saveButton).toBeInTheDocument();
       expect(cancelButton).toBeInTheDocument();
     });
@@ -123,10 +123,10 @@ describe('UpdateRecipePage', () => {
       const { nameInput, linkInput, imageInput, noteInput } = await setup();
 
       await waitFor(() => {
-        expect(nameInput).toHaveValue(validRecipeUpdated.fields.name);
-        expect(linkInput).toHaveValue(validRecipeUpdated.fields.link);
-        expect(imageInput).toHaveValue(validRecipeUpdated.fields.image);
-        expect(noteInput).toHaveValue(validRecipeUpdated.fields.note);
+        expect(nameInput).toHaveValue(recipeUpdatedJson.fields.name);
+        expect(linkInput).toHaveValue(recipeUpdatedJson.fields.link);
+        expect(imageInput).toHaveValue(recipeUpdatedJson.fields.image);
+        expect(noteInput).toHaveValue(recipeUpdatedJson.fields.note);
       });
     });
 
@@ -160,7 +160,7 @@ describe('UpdateRecipePage', () => {
         }
       );
 
-      expect(nameInput).toHaveValue(`${validRecipe.fields.name}a`);
+      expect(nameInput).toHaveValue(`${recipeJson.fields.name}a`);
     }, 10000);
   });
 

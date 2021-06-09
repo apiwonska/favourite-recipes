@@ -3,7 +3,7 @@ import { render, screen, waitFor } from '@testing-library/react';
 import user from '@testing-library/user-event';
 import { TestWrapper } from 'shared/testUtils';
 
-import recipeData from '__mocks__/validRecipe.json';
+import recipeJson from '__mocks__/recipe.json';
 import axiosInstance from 'apis/recipesAxiosInstance';
 import RecipeItem, { IRecipeItemProps } from './RecipeItem';
 
@@ -29,11 +29,11 @@ const WrappedRecipeItem: React.FC<IRecipeItemProps> = ({ ...props }) => (
 
 test('renders all elements of recipe card', () => {
   render(
-    <WrappedRecipeItem recipe={recipeData.fields} recipeId={recipeData.id} />
+    <WrappedRecipeItem recipe={recipeJson.fields} recipeId={recipeJson.id} />
   );
 
-  const title = screen.getByText(recipeData.fields.name);
-  const description = screen.getByText(recipeData.fields.note);
+  const title = screen.getByText(recipeJson.fields.name);
+  const description = screen.getByText(recipeJson.fields.note);
   const link = screen.getByText(/go to recipe/i);
   const image = screen.getByRole('img');
   const deleteBtn = screen.getByRole('button', { name: /delete/i });
@@ -42,7 +42,7 @@ test('renders all elements of recipe card', () => {
   expect(title).toBeInTheDocument();
   expect(description).toBeInTheDocument();
   expect(link).toBeInTheDocument();
-  expect(image).toHaveAttribute('src', recipeData.fields.image);
+  expect(image).toHaveAttribute('src', recipeJson.fields.image);
   expect(deleteBtn).toBeInTheDocument();
   expect(editBtn).toBeInTheDocument();
 });
@@ -52,12 +52,12 @@ test('delete card after clicking delete button and user confirmation', async () 
     .spyOn(axiosInstance, 'delete')
     .mockImplementation(
       jest.fn(() =>
-        Promise.resolve({ data: { deleted: 'true', id: `${recipeData.id}` } })
+        Promise.resolve({ data: { deleted: 'true', id: `${recipeJson.id}` } })
       )
     );
   jest.spyOn(window, 'confirm').mockReturnValueOnce(true);
   render(
-    <WrappedRecipeItem recipe={recipeData.fields} recipeId={recipeData.id} />
+    <WrappedRecipeItem recipe={recipeJson.fields} recipeId={recipeJson.id} />
   );
   const deleteBtn = screen.getByRole('button', { name: /delete/i });
   user.click(deleteBtn);
@@ -65,16 +65,16 @@ test('delete card after clicking delete button and user confirmation', async () 
   expect(window.confirm).toBeCalledTimes(1);
   expect(window.confirm).toHaveReturnedWith(true);
   await waitFor(() => {
-    expect(axiosInstance.delete).toBeCalledWith(`/recipes/${recipeData.id}`);
+    expect(axiosInstance.delete).toBeCalledWith(`/recipes/${recipeJson.id}`);
   });
 });
 
 test('go to update recipe page after clicking edit button', () => {
   render(
-    <WrappedRecipeItem recipe={recipeData.fields} recipeId={recipeData.id} />
+    <WrappedRecipeItem recipe={recipeJson.fields} recipeId={recipeJson.id} />
   );
   const editBtn = screen.getByRole('button', { name: /edit/i });
 
   user.click(editBtn);
-  expect(mockHistoryPush).toBeCalledWith(`/update/${recipeData.id}`);
+  expect(mockHistoryPush).toBeCalledWith(`/update/${recipeJson.id}`);
 });

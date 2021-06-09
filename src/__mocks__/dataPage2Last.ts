@@ -1,5 +1,5 @@
-import page1 from './validRecipesPage1.json';
-import page2 from './validRecipesPage2Last.json';
+import page1 from './recipesPage1.json';
+import page2 from './recipesPage2Last.json';
 
 const data = {
   pageParams: [undefined, 'itrDeOAYTnRLnKScW/rec09mfnUW1ANcrLB'],

@@ -2,23 +2,30 @@ import { setupServer } from 'msw/node';
 import { rest } from 'msw';
 
 import { getUrl } from 'apis/recipes';
-import dataPage1Json from '__mocks__/validRecipesPage1.json';
-import dataPage2Json from '__mocks__/validRecipesPage2Last.json';
-import validRecipe from '__mocks__/validRecipe.json';
+import recipesPage1Json from '__mocks__/recipesPage1.json';
+import recipesPage2Json from '__mocks__/recipesPage2Last.json';
+import recipesSearchTestJson from '__mocks__/recipesSearchTest.json';
+import recipeJson from '__mocks__/recipe.json';
 
 const server = setupServer(
   rest.get(getUrl('/recipes'), (req, res, ctx) => {
     const offset = req.url.searchParams.get('offset');
+    const filterByFormula = req.url.searchParams.get('filterByFormula');
+
+    if (filterByFormula?.includes('search test')) {
+      return res(ctx.status(200), ctx.json(recipesSearchTestJson));
+    }
 
     // Works if there are only 2 pages. If you have more you need to specify offsets values
     if (offset !== '') {
-      return res(ctx.status(200), ctx.json(dataPage2Json));
+      return res(ctx.status(200), ctx.json(recipesPage2Json));
     }
-    return res(ctx.status(200), ctx.json(dataPage1Json));
+
+    return res(ctx.status(200), ctx.json(recipesPage1Json));
   }),
   rest.post(getUrl('/recipes'), (req, res, ctx) => res(ctx.status(200))),
   rest.get(getUrl('/recipes/testid'), (req, res, ctx) =>
-    res(ctx.status(200), ctx.json(validRecipe))
+    res(ctx.status(200), ctx.json(recipeJson))
   ),
   rest.put(getUrl('/recipes/testid'), (req, res, ctx) => res(ctx.status(200))),
   rest.get('*', (req, res, ctx) => {

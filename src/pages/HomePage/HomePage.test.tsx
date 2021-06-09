@@ -34,10 +34,12 @@ describe('HomePage', () => {
   it('render permanent elements of the page', async () => {
     render(<WrappedHomePage />);
     const addRecipeLink = screen.getByText(/add new recipe/i);
+    const searchForm = screen.getByPlaceholderText(/search recipe/i);
     const pageHeader = screen.getByRole('heading', { level: 2 });
 
     expect(addRecipeLink).toBeInTheDocument();
     expect(addRecipeLink).toHaveAttribute('href', '/add');
+    expect(searchForm).toBeInTheDocument();
     expect(pageHeader).toHaveTextContent('Your Recipes');
   });
 
@@ -96,6 +98,18 @@ describe('HomePage', () => {
       await waitFor(() =>
         expect(screen.getAllByTestId('recipe-card')).toHaveLength(7)
       );
+    });
+
+    it('filter records for searched text', async () => {
+      render(<WrappedHomePage />);
+      const searchForm = screen.getByPlaceholderText(/search recipe/i);
+      user.type(searchForm, 'search test');
+      await waitFor(() => {
+        expect(screen.getAllByTestId('recipe-card')).toHaveLength(1);
+        expect(
+          screen.getByText('Search test. Searched recipe title')
+        ).toBeInTheDocument();
+      });
     });
   });
 });
