@@ -36,7 +36,11 @@ const RecipeItem: React.FC<IRecipeItemProps> = ({
   };
 
   return (
-    <Col lg={4} sm={6} className="m-0 p-0 d-flex align-items-stretch">
+    <Col
+      lg={4}
+      sm={6}
+      className="m-0 p-0 d-flex align-items-stretch flex-grow-1"
+    >
       <Card className="recipe-card flex-grow-1" data-testid="recipe-card">
         <Card.Img
           variant="top"

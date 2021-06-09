@@ -1,13 +1,11 @@
+import axios, { CancelTokenSource } from 'axios';
+
 import { IRecipeData, IRecipe } from 'appInterfaces';
 import { IFormData as IAddRecipeFormData } from 'pages/AddRecipePage/AddRecipeForm';
 import { IFormData as IUpdateRecipeFormData } from 'pages/UpdateRecipePage/UpdateRecipeForm';
 import axiosInstance, { url } from 'apis/recipesAxiosInstance';
 
 export const getUrl = (path: string): string => url + path;
-const view = 'view=grid';
-const formula = "filterByFormula=AND(NOT(name+%3D+'')%2C+NOT(link+%3D+''))";
-const sort = 'sort%5B0%5D%5Bfield%5D=created&sort%5B0%5D%5Bdirection%5D=desc';
-const recipeViewParams = `${view}&${formula}&${sort}`;
 
 export const fetchRecipe = async (recipeId: string): Promise<IRecipe> => {
   try {
@@ -18,16 +16,48 @@ export const fetchRecipe = async (recipeId: string): Promise<IRecipe> => {
   }
 };
 
-export const fetchRecipes = async ({
-  pageParam = '',
-}: {
+interface IFetchRecipesArgs {
+  queryKey: [string, { searchText: string }];
   pageParam?: string;
-}): Promise<IRecipeData> => {
+}
+
+let cancelFetchRecipes: CancelTokenSource | null = null;
+
+export const fetchRecipes = async ({
+  queryKey,
+  pageParam = '',
+}: IFetchRecipesArgs): Promise<IRecipeData> => {
+  const searchText = queryKey[1].searchText.toLowerCase();
   const pageSize = 6;
+
+  // Query parameters
+  // Same order as in a specified view (otherwise it's random)
+  const view = 'view=grid';
+  // Sort from most recently created
+  const sort = 'sort%5B0%5D%5Bfield%5D=created&sort%5B0%5D%5Bdirection%5D=desc';
+  // Ignore records that have empty name or link field
+  const filterByFormula = (optionalFilters = ''): string =>
+    `filterByFormula=AND(${optionalFilters}NOT(name%3D'')%2CNOT(link%3D''))`;
+  let optionalFilters = '';
+  if (searchText.length) {
+    // Search for the phrase in name and note fields
+    optionalFilters += `OR(SEARCH(%22${searchText}%22%2CLOWER(name))%2CSEARCH(%22${searchText}%22%2CLOWER(note)))%2C`;
+  }
+  const recipeViewParams = `${view}&${filterByFormula(
+    optionalFilters
+  )}&${sort}`;
+
+  // Cancelling previous request
+  if (cancelFetchRecipes) cancelFetchRecipes.cancel();
+  const { CancelToken } = axios;
+  cancelFetchRecipes = CancelToken.source();
 
   try {
     const res = await axiosInstance.get(
-      `/recipes?${recipeViewParams}&pageSize=${pageSize}&offset=${pageParam}`
+      `/recipes?${recipeViewParams}&pageSize=${pageSize}&offset=${pageParam}`,
+      {
+        cancelToken: cancelFetchRecipes.token,
+      }
     );
     return res.data;
   } catch (err) {

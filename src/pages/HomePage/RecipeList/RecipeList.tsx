@@ -7,7 +7,11 @@ import { IRecipe, IRecipeData } from 'appInterfaces';
 import RecipeItem from '../RecipeItem';
 import useFetchRecipes from './useFetchRecipes';
 
-const RecipeList: React.FC = () => {
+interface IRecipeList {
+  searchText: string;
+}
+
+const RecipeList: React.FC<IRecipeList> = ({ searchText }) => {
   const {
     data,
     isLoading,
@@ -16,7 +20,7 @@ const RecipeList: React.FC = () => {
     fetchNextPage,
     hasNextPage,
     isFetchingNextPage,
-  } = useFetchRecipes();
+  } = useFetchRecipes(searchText);
 
   if (isLoading) {
     return (
@@ -43,7 +47,7 @@ const RecipeList: React.FC = () => {
 
   return (
     <>
-      <CardDeck>
+      <CardDeck className="container-fluid">
         {data?.pages.map((page: IRecipeData) =>
           page.records.map((recipe: IRecipe) => (
             <RecipeItem

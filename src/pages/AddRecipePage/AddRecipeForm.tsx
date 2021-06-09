@@ -125,15 +125,6 @@ const AddRecipeForm: React.FC<IAddRecipeFormProps> = ({
         </Form.Group>
         <div className="text-right">
           <Button
-            variant="secondary"
-            onClick={() => {
-              history.goBack();
-            }}
-            className="m-2"
-          >
-            Cancel
-          </Button>
-          <Button
             variant="warning"
             type="submit"
             disabled={isLoading}
@@ -150,6 +141,15 @@ const AddRecipeForm: React.FC<IAddRecipeFormProps> = ({
               />
             )}
             Submit Recipe
+          </Button>
+          <Button
+            variant="secondary"
+            onClick={() => {
+              history.goBack();
+            }}
+            className="m-2"
+          >
+            Cancel
           </Button>
         </div>
       </Form>

@@ -18,8 +18,14 @@ interface IHookReturn {
   hasNextPage: boolean | undefined;
   isFetchingNextPage: boolean;
 }
+type TRecipesQueryKey = [
+  string,
+  {
+    searchText: string;
+  }
+];
 
-export const useFetchRecipes = (): IHookReturn => {
+export const useFetchRecipes = (searchText: string): IHookReturn => {
   const {
     data,
     isLoading,
@@ -28,9 +34,13 @@ export const useFetchRecipes = (): IHookReturn => {
     fetchNextPage,
     hasNextPage,
     isFetchingNextPage,
-  } = useInfiniteQuery<IRecipeData, Error>('recipes', fetchRecipes, {
-    getNextPageParam: (lastPage) => lastPage.offset,
-  });
+  } = useInfiniteQuery<IRecipeData, Error, IRecipeData, TRecipesQueryKey>(
+    ['recipes', { searchText }],
+    fetchRecipes,
+    {
+      getNextPageParam: (lastPage) => lastPage.offset,
+    }
+  );
   return {
     data,
     isLoading,
