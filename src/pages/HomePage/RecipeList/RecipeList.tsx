@@ -46,6 +46,16 @@ const RecipeList: React.FC<IRecipeList> = ({ searchText, searchCategory }) => {
     );
   }
 
+  if (!data?.pages[0].records.length) {
+    return (
+      <Alert variant="secondary">
+        No recipes found{' '}
+        <span role="img" aria-hidden>
+          &#128577;
+        </span>
+      </Alert>
+    );
+  }
   return (
     <>
       <CardDeck className="container-fluid">
@@ -59,24 +69,26 @@ const RecipeList: React.FC<IRecipeList> = ({ searchText, searchCategory }) => {
           ))
         )}
       </CardDeck>
-      <Button
-        variant="secondary"
-        onClick={() => fetchNextPage()}
-        disabled={!hasNextPage || isFetchingNextPage}
-        className=" mt-3 d-flex justify-content-center align-items-center"
-      >
-        {isFetchingNextPage && (
-          <Spinner
-            as="span"
-            animation="border"
-            size="sm"
-            role="status"
-            aria-hidden="true"
-            className="mr-2"
-          />
-        )}
-        Load more
-      </Button>
+      {hasNextPage && (
+        <Button
+          variant="secondary"
+          onClick={() => fetchNextPage()}
+          disabled={!hasNextPage || isFetchingNextPage}
+          className=" mt-3 d-flex justify-content-center align-items-center"
+        >
+          {isFetchingNextPage && (
+            <Spinner
+              as="span"
+              animation="border"
+              size="sm"
+              role="status"
+              aria-hidden="true"
+              className="mr-2"
+            />
+          )}
+          Load more
+        </Button>
+      )}
     </>
   );
 };
