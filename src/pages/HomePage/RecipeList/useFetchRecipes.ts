@@ -22,10 +22,14 @@ type TRecipesQueryKey = [
   string,
   {
     searchText: string;
+    searchCategory: string;
   }
 ];
 
-export const useFetchRecipes = (searchText: string): IHookReturn => {
+export const useFetchRecipes = (
+  searchText: string,
+  searchCategory: string
+): IHookReturn => {
   const {
     data,
     isLoading,
@@ -35,7 +39,7 @@ export const useFetchRecipes = (searchText: string): IHookReturn => {
     hasNextPage,
     isFetchingNextPage,
   } = useInfiniteQuery<IRecipeData, Error, IRecipeData, TRecipesQueryKey>(
-    ['recipes', { searchText }],
+    ['recipes', { searchText, searchCategory }],
     fetchRecipes,
     {
       getNextPageParam: (lastPage) => lastPage.offset,

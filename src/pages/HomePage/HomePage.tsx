@@ -1,34 +1,45 @@
-import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import Container from 'react-bootstrap/Container';
-import Form from 'react-bootstrap/Form';
-import FormControl from 'react-bootstrap/FormControl';
+import Row from 'react-bootstrap/Row';
+import Col from 'react-bootstrap/Col';
+import { useState } from 'react';
 
 import RecipeList from './RecipeList';
+import SearchForm from './SearchForm';
 
 const HomePage: React.FC = () => {
   const [searchText, setSearchText] = useState<string>('');
+  const [searchCategory, setSearchCategory] = useState<string>('');
 
   return (
     <>
-      <Container className="d-flex justify-content-end">
-        <Form className="d-flex mr-2">
-          <FormControl
-            type="search"
-            placeholder="Search recipes"
-            className="mr-2"
-            aria-label="Search"
-            value={searchText}
-            onChange={(e) => setSearchText(e.target.value)}
-          />
-        </Form>
-        <Link to="/add" className="btn btn-warning">
-          Add New Recipe
-        </Link>
+      <Container fluid>
+        <Row className="justify-content-end mb-4">
+          <Col sm="auto">
+            <Link to="/add" className="btn btn-warning w-100">
+              Add New Recipe
+            </Link>
+          </Col>
+        </Row>
+
+        <Row className="justify-content-center">
+          <Col sm={10} md={8}>
+            <SearchForm
+              {...{
+                searchText,
+                setSearchText,
+                searchCategory,
+                setSearchCategory,
+              }}
+            />
+          </Col>
+        </Row>
       </Container>
-      <h2 className="m-5">Your Recipes!</h2>
-      <RecipeList searchText={searchText} />
+
+      <h2 className="mb-5 mt-4">Your Recipes!</h2>
+      <RecipeList {...{ searchText, searchCategory }} />
     </>
   );
 };
+
 export default HomePage;

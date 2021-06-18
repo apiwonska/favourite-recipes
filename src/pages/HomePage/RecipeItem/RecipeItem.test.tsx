@@ -4,7 +4,7 @@ import user from '@testing-library/user-event';
 import { TestWrapper } from 'shared/testUtils';
 
 import recipeJson from '__mocks__/recipe.json';
-import axiosInstance from 'apis/recipesAxiosInstance';
+import axiosInstance from 'apis/favoriteRecipesAxiosInstance';
 import RecipeItem, { IRecipeItemProps } from './RecipeItem';
 
 const mockHistoryPush = jest.fn();

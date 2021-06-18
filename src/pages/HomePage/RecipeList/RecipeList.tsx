@@ -9,9 +9,10 @@ import useFetchRecipes from './useFetchRecipes';
 
 interface IRecipeList {
   searchText: string;
+  searchCategory: string;
 }
 
-const RecipeList: React.FC<IRecipeList> = ({ searchText }) => {
+const RecipeList: React.FC<IRecipeList> = ({ searchText, searchCategory }) => {
   const {
     data,
     isLoading,
@@ -20,7 +21,7 @@ const RecipeList: React.FC<IRecipeList> = ({ searchText }) => {
     fetchNextPage,
     hasNextPage,
     isFetchingNextPage,
-  } = useFetchRecipes(searchText);
+  } = useFetchRecipes(searchText, searchCategory);
 
   if (isLoading) {
     return (

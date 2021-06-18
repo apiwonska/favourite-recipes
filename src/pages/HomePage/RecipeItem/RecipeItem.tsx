@@ -4,11 +4,12 @@ import Card from 'react-bootstrap/Card';
 import Button from 'react-bootstrap/Button';
 import Col from 'react-bootstrap/Col';
 import Spinner from 'react-bootstrap/Spinner';
+
 import Icon, { iconEnum } from 'assets/Icon';
 import { IRecipe } from 'appInterfaces';
 import placeholder from 'assets/heather-ford-_U4F6pyOQRs-unsplash.jpg';
-
 import { deleteRecipe } from 'apis/recipes';
+import useCategories from 'shared/useCategories';
 import './RecipeItem.css';
 
 export interface IRecipeItemProps {
@@ -18,7 +19,7 @@ export interface IRecipeItemProps {
 
 const RecipeItem: React.FC<IRecipeItemProps> = ({
   recipeId,
-  recipe: { name, note, image, link, locked },
+  recipe: { name, note, image, link, locked, categories },
 }) => {
   const queryClient = useQueryClient();
   const history = useHistory();
@@ -27,6 +28,7 @@ const RecipeItem: React.FC<IRecipeItemProps> = ({
       queryClient.invalidateQueries('recipes');
     },
   });
+  const { categories: allCategories } = useCategories();
 
   const handleDelete = () => {
     // eslint-disable-next-line no-alert
@@ -54,6 +56,18 @@ const RecipeItem: React.FC<IRecipeItemProps> = ({
             <Icon name={iconEnum.Link} size="1.3em" />
             &nbsp;Go to Recipe
           </Card.Link>
+          <div className="my-3">
+            {allCategories &&
+              categories &&
+              categories.map((categoryId) => (
+                <span className="badge badge-secondary mr-2" key={categoryId}>
+                  {
+                    allCategories.find((category) => category.id === categoryId)
+                      ?.fields?.name
+                  }
+                </span>
+              ))}
+          </div>
         </Card.Body>
         <Card.Footer className="text-right">
           <Button

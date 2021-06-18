@@ -3,7 +3,7 @@ import axios, { CancelTokenSource } from 'axios';
 import { IRecipeData, IRecipe } from 'appInterfaces';
 import { IFormData as IAddRecipeFormData } from 'pages/AddRecipePage/AddRecipeForm';
 import { IFormData as IUpdateRecipeFormData } from 'pages/UpdateRecipePage/UpdateRecipeForm';
-import axiosInstance, { url } from 'apis/recipesAxiosInstance';
+import axiosInstance, { url } from 'apis/favoriteRecipesAxiosInstance';
 
 export const getUrl = (path: string): string => url + path;
 
@@ -17,7 +17,7 @@ export const fetchRecipe = async (recipeId: string): Promise<IRecipe> => {
 };
 
 interface IFetchRecipesArgs {
-  queryKey: [string, { searchText: string }];
+  queryKey: [string, { searchText: string; searchCategory: string }];
   pageParam?: string;
 }
 
@@ -28,24 +28,26 @@ export const fetchRecipes = async ({
   pageParam = '',
 }: IFetchRecipesArgs): Promise<IRecipeData> => {
   const searchText = queryKey[1].searchText.toLowerCase();
+  const { searchCategory } = queryKey[1];
   const pageSize = 6;
 
   // Query parameters
   // Same order as in a specified view (otherwise it's random)
   const view = 'view=grid';
   // Sort from most recently created
-  const sort = 'sort%5B0%5D%5Bfield%5D=created&sort%5B0%5D%5Bdirection%5D=desc';
+  const sort =
+    '&sort%5B0%5D%5Bfield%5D=created&sort%5B0%5D%5Bdirection%5D=desc';
   // Ignore records that have empty name or link field
-  const filterByFormula = (optionalFilters = ''): string =>
-    `filterByFormula=AND(${optionalFilters}NOT(name%3D'')%2CNOT(link%3D''))`;
-  let optionalFilters = '';
-  if (searchText.length) {
-    // Search for the phrase in name and note fields
-    optionalFilters += `OR(SEARCH(%22${searchText}%22%2CLOWER(name))%2CSEARCH(%22${searchText}%22%2CLOWER(note)))%2C`;
-  }
-  const recipeViewParams = `${view}&${filterByFormula(
-    optionalFilters
-  )}&${sort}`;
+  const filteroutEmptyRecords = `NOT(name%3D'')%2CNOT(link%3D'')`;
+  // Search for the text in name and note fields
+  const textFilter = searchText
+    ? `%2COR(SEARCH(%22${searchText}%22%2CLOWER(name))%2CSEARCH(%22${searchText}%22%2CLOWER(note)))`
+    : '';
+  const categoryFilter = searchCategory
+    ? `%2CSEARCH(%22${searchCategory}%22%2Ccategories)`
+    : '';
+  const filterByFormula = `&filterByFormula=AND(${filteroutEmptyRecords}${textFilter}${categoryFilter})`;
+  const recipeParams = `${view}${filterByFormula}${sort}`;
 
   // Cancelling previous request
   if (cancelFetchRecipes) cancelFetchRecipes.cancel();
@@ -54,7 +56,7 @@ export const fetchRecipes = async ({
 
   try {
     const res = await axiosInstance.get(
-      `/recipes?${recipeViewParams}&pageSize=${pageSize}&offset=${pageParam}`,
+      `/recipes?${recipeParams}&pageSize=${pageSize}&offset=${pageParam}`,
       {
         cancelToken: cancelFetchRecipes.token,
       }
