@@ -13,7 +13,7 @@ jest.mock('./useFetchRecipes', () => jest.fn());
 
 const WrappedRecipeList: React.FC = () => (
   <TestWrapper>
-    <RecipeList />
+    <RecipeList searchText="" searchCategory="" />
   </TestWrapper>
 );
 
@@ -90,7 +90,7 @@ describe('RecipeList', () => {
       expect(fetchNextPage).toHaveBeenCalledTimes(1);
     });
 
-    it('renders all recipes and disables load more button', () => {
+    it("renders all recipes don't render load more button", () => {
       (useFetchRecipesMock as jest.Mock).mockImplementation(() => ({
         data: dataPage2,
         isLoading: false,
@@ -105,7 +105,7 @@ describe('RecipeList', () => {
       const loadMoreBtn = screen.queryByText(/load more/i);
 
       expect(recipes).toHaveLength(7);
-      expect(loadMoreBtn).toBeDisabled();
+      expect(loadMoreBtn).not.toBeInTheDocument();
     });
   });
 });

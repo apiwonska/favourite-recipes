@@ -5,7 +5,6 @@ import {
   waitForElementToBeRemoved,
 } from '@testing-library/react';
 import user from '@testing-library/user-event';
-import { QueryCache } from 'react-query';
 import { Route } from 'react-router-dom';
 
 import { testServerSetup, server, rest } from '__mocks__/testServer';
@@ -21,13 +20,8 @@ const WrappedUpdateRecipePage: React.FC = () => (
   </TestWrapper>
 );
 
-const queryCache = new QueryCache();
-
 // Tests setup
 testServerSetup();
-afterEach(() => {
-  queryCache.clear();
-});
 
 describe('UpdateRecipePage', () => {
   describe('page layout and initial form state', () => {
@@ -46,6 +40,9 @@ describe('UpdateRecipePage', () => {
       const linkInput = screen.getByRole('textbox', { name: /link/i });
       const imageInput = screen.getByRole('textbox', { name: /image/i });
       const noteInput = screen.getByRole('textbox', { name: /note/i });
+      const categoriesInput = screen.getByRole('listbox', {
+        name: /categories/i,
+      });
       const saveButton = screen.getByRole('button', { name: /save/i });
       const cancelButton = screen.getByRole('button', { name: /cancel/i });
 
@@ -54,6 +51,7 @@ describe('UpdateRecipePage', () => {
       expect(linkInput).toHaveValue(recipeJson.fields.link);
       expect(imageInput).toHaveValue(recipeJson.fields.image);
       expect(noteInput).toHaveValue(recipeJson.fields.note);
+      expect(categoriesInput).toHaveValue(recipeJson.fields.categories);
       expect(saveButton).toBeInTheDocument();
       expect(cancelButton).toBeInTheDocument();
     });
@@ -86,7 +84,7 @@ describe('UpdateRecipePage', () => {
     });
   });
 
-  describe('with valid input (only required fields)', () => {
+  describe('with valid input', () => {
     const setup = async () => {
       const utils = render(<WrappedUpdateRecipePage />);
       await waitForElementToBeRemoved(screen.getByText(/loading/i));
@@ -94,12 +92,16 @@ describe('UpdateRecipePage', () => {
       const linkInput = screen.getByRole('textbox', { name: /link/i });
       const imageInput = screen.getByRole('textbox', { name: /image/i });
       const noteInput = screen.getByRole('textbox', { name: /note/i });
+      const categoriesInput = screen.getByRole('listbox', {
+        name: /categories/i,
+      });
       const saveButton = screen.getByRole('button', { name: /save/i });
       const homePageLink = screen.getByRole('link', { name: /home page/i });
       user.type(nameInput, 'a');
       user.type(linkInput, 'a');
       user.type(imageInput, 'a');
       user.type(noteInput, 'a');
+      user.selectOptions(categoriesInput, 'breakfast');
       user.click(saveButton);
       return {
         ...utils,
@@ -107,27 +109,28 @@ describe('UpdateRecipePage', () => {
         linkInput,
         imageInput,
         noteInput,
+        categoriesInput,
         saveButton,
         homePageLink,
       };
     };
 
-    it('show success message if response status is ok', async () => {
-      await setup();
+    it('show success message and display changed input values after successful submit', async () => {
+      const {
+        nameInput,
+        linkInput,
+        imageInput,
+        noteInput,
+        categoriesInput,
+      } = await setup();
       const successMessage = await screen.findByText(/recipe was saved/i);
 
       expect(successMessage).toBeInTheDocument();
-    });
-
-    it('display changed input values after submit', async () => {
-      const { nameInput, linkInput, imageInput, noteInput } = await setup();
-
-      await waitFor(() => {
-        expect(nameInput).toHaveValue(recipeUpdatedJson.fields.name);
-        expect(linkInput).toHaveValue(recipeUpdatedJson.fields.link);
-        expect(imageInput).toHaveValue(recipeUpdatedJson.fields.image);
-        expect(noteInput).toHaveValue(recipeUpdatedJson.fields.note);
-      });
+      expect(nameInput).toHaveValue(recipeUpdatedJson.fields.name);
+      expect(linkInput).toHaveValue(recipeUpdatedJson.fields.link);
+      expect(imageInput).toHaveValue(recipeUpdatedJson.fields.image);
+      expect(noteInput).toHaveValue(recipeUpdatedJson.fields.note);
+      expect(categoriesInput).toHaveValue(recipeUpdatedJson.fields.categories);
     });
 
     it('focus on Go To HomePage link if response status is ok', async () => {
@@ -141,27 +144,31 @@ describe('UpdateRecipePage', () => {
     it('show error message and keep form data if response status is error', async () => {
       // Switch off logging errors
       jest.spyOn(console, 'error').mockImplementation(() => jest.fn());
-
       server.use(
         rest.put(getUrl('/recipes/testid'), (req, res, ctx) =>
           res(ctx.status(500))
         )
       );
-
-      const { nameInput } = await setup();
-
-      await waitFor(
-        () => {
-          const errorMessage = screen.getByText(/error occurred/i);
-          expect(errorMessage).toBeInTheDocument();
-        },
-        {
-          timeout: 2000,
-        }
+      const {
+        nameInput,
+        linkInput,
+        imageInput,
+        noteInput,
+        categoriesInput,
+      } = await setup();
+      const errorMessage = await screen.findByText(
+        /error occurred/i,
+        {},
+        { timeout: 1500 }
       );
 
-      expect(nameInput).toHaveValue(`${recipeJson.fields.name}a`);
-    }, 10000);
+      expect(errorMessage).toBeInTheDocument();
+      expect(nameInput).toHaveValue(recipeUpdatedJson.fields.name);
+      expect(linkInput).toHaveValue(recipeUpdatedJson.fields.link);
+      expect(imageInput).toHaveValue(recipeUpdatedJson.fields.image);
+      expect(noteInput).toHaveValue(recipeUpdatedJson.fields.note);
+      expect(categoriesInput).toHaveValue(recipeUpdatedJson.fields.categories);
+    });
   });
 
   describe('with invalid input', () => {
@@ -187,7 +194,6 @@ describe('UpdateRecipePage', () => {
       user.clear(linkInput);
       const errorName = await screen.findByText(/name is a required field/i);
       const errorLink = await screen.findByText(/link is a required field/i);
-
       expect(errorName).toBeInTheDocument();
       expect(errorLink).toBeInTheDocument();
     });
@@ -200,7 +206,6 @@ describe('UpdateRecipePage', () => {
       user.type(linkInput, ' ');
       const errorName = await screen.findByText(/name is a required field/i);
       const errorLink = await screen.findByText(/link is a required field/i);
-
       expect(errorName).toBeInTheDocument();
       expect(errorLink).toBeInTheDocument();
       expect(nameInput).toHaveAttribute('aria-invalid', 'true');
@@ -214,7 +219,6 @@ describe('UpdateRecipePage', () => {
       const errorName = await screen.findByText(
         'name must be at least 2 characters'
       );
-
       expect(errorName).toBeInTheDocument();
       expect(nameInput).toHaveAttribute('aria-invalid', 'true');
     });
@@ -226,7 +230,6 @@ describe('UpdateRecipePage', () => {
       const errorName = await screen.findByText(
         'name must be at most 50 characters'
       );
-
       expect(errorName).toBeInTheDocument();
       expect(nameInput).toHaveAttribute('aria-invalid', 'true');
     });
@@ -237,7 +240,6 @@ describe('UpdateRecipePage', () => {
       user.clear(noteInput);
       user.type(noteInput, getString(101));
       const errorNote = await screen.findByText(errorMessage);
-
       expect(errorNote).toBeInTheDocument();
       expect(noteInput).toHaveAttribute('aria-invalid', 'true');
     });
@@ -247,7 +249,6 @@ describe('UpdateRecipePage', () => {
       const errorMessage = 'link must be a valid URL';
       user.clear(linkInput);
       user.type(linkInput, 'buritto.com');
-
       expect(await screen.findByText(errorMessage)).toBeInTheDocument();
       expect(linkInput).toHaveAttribute('aria-invalid', 'true');
     });
@@ -257,7 +258,6 @@ describe('UpdateRecipePage', () => {
       const errorMessage = 'image must be a valid URL';
       user.clear(imageInput);
       user.type(imageInput, 'buritto.com');
-
       expect(await screen.findByText(errorMessage)).toBeInTheDocument();
       expect(imageInput).toHaveAttribute('aria-invalid', 'true');
     });

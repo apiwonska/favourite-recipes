@@ -1,6 +1,5 @@
 import { render, screen, waitFor } from '@testing-library/react';
 import user from '@testing-library/user-event';
-import { QueryCache } from 'react-query';
 
 import { testServerSetup, server, rest } from '__mocks__/testServer';
 import { TestWrapper, getString } from 'shared/testUtils';
@@ -13,13 +12,8 @@ const WrappedAddRecipePage: React.FC = () => (
   </TestWrapper>
 );
 
-const queryCache = new QueryCache();
-
 // Tests setup
 testServerSetup();
-afterEach(() => {
-  queryCache.clear();
-});
 
 afterEach(() => {
   jest.restoreAllMocks();
@@ -32,13 +26,16 @@ describe('AddRecipePage', () => {
       expect(document.title).toContain('Favourite Recipes | Add New Recipe');
     });
 
-    it('renders all form elements correctly', () => {
+    it('renders all form elements correctly', async () => {
       render(<WrappedAddRecipePage />);
       const form = screen.getByRole('form');
       const nameInput = screen.getByRole('textbox', { name: /name/i });
       const linkInput = screen.getByRole('textbox', { name: /link/i });
       const imageInput = screen.getByRole('textbox', { name: /image/i });
       const noteInput = screen.getByRole('textbox', { name: /note/i });
+      const categoriesInput = await screen.findByRole('listbox', {
+        name: /categories/i,
+      });
       const submitButton = screen.getByRole('button', { name: /submit/i });
       const cancelButton = screen.getByRole('button', { name: /cancel/i });
 
@@ -47,6 +44,7 @@ describe('AddRecipePage', () => {
       expect(linkInput).toHaveValue('');
       expect(imageInput).toHaveValue('');
       expect(noteInput).toHaveValue('');
+      expect(categoriesInput).toHaveValue([]);
       expect(submitButton).toBeInTheDocument();
       expect(cancelButton).toBeInTheDocument();
     });
@@ -75,28 +73,36 @@ describe('AddRecipePage', () => {
     });
   });
 
-  describe('with valid input (only required fields)', () => {
-    const setup = () => {
+  describe('with valid input', () => {
+    const setup = async () => {
       const utils = render(<WrappedAddRecipePage />);
       const nameInput = screen.getByRole('textbox', { name: /name/i });
       const linkInput = screen.getByRole('textbox', { name: /link/i });
+      const imageInput = screen.getByRole('textbox', { name: /image/i });
+      const noteInput = screen.getByRole('textbox', { name: /note/i });
+      const categoriesInput = await screen.findByRole('listbox', {
+        name: /categories/i,
+      });
       const submitButton = screen.getByRole('button', { name: /submit/i });
       const homePageLink = screen.getByRole('link', { name: /home page/i });
       user.type(nameInput, 'buritto');
       user.type(linkInput, 'http://buritto.com');
+      user.type(imageInput, 'http://buritto.img');
+      user.type(noteInput, "it's awesome");
+      user.selectOptions(categoriesInput, ['breakfast', 'lunch']);
       user.click(submitButton);
       return { ...utils, nameInput, linkInput, submitButton, homePageLink };
     };
 
     it('show success message if response status is ok', async () => {
-      setup();
+      await setup();
       const successMessage = await screen.findByText(/recipe was saved/i);
 
       expect(successMessage).toBeInTheDocument();
     });
 
     it('reset form if response status is ok', async () => {
-      const { nameInput, linkInput } = setup();
+      const { nameInput, linkInput } = await setup();
 
       await waitFor(() => {
         expect(nameInput).toHaveValue('');
@@ -105,7 +111,7 @@ describe('AddRecipePage', () => {
     });
 
     it('focus on Go To HomePage link if response status is ok', async () => {
-      const { homePageLink } = setup();
+      const { homePageLink } = await setup();
 
       await waitFor(() => {
         expect(homePageLink).toHaveFocus();
@@ -119,21 +125,21 @@ describe('AddRecipePage', () => {
       server.use(
         rest.post(getUrl('/recipes'), (req, res, ctx) => res(ctx.status(500)))
       );
-      const { nameInput, linkInput } = setup();
+      const { nameInput, linkInput } = await setup();
 
-      await waitFor(
-        () => {
-          const errorMessage = screen.getByText(/error occurred/i);
-          expect(errorMessage).toBeInTheDocument();
-        },
-        {
-          timeout: 2000,
-        }
-      );
+      expect(
+        await screen.findByText(
+          /error occurred/i,
+          {},
+          {
+            timeout: 1500,
+          }
+        )
+      ).toBeInTheDocument();
 
       expect(nameInput).toHaveValue('buritto');
       expect(linkInput).toHaveValue('http://buritto.com');
-    }, 10000);
+    });
   });
 
   describe('with invalid input', () => {
