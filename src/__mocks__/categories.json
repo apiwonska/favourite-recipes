@@ -1,0 +1,80 @@
+{
+  "records": [
+    {
+      "id": "recFtHrxetyNZteia",
+      "fields": {
+        "name": "breakfast",
+        "order": 1,
+        "recipes": ["recBthKwkOdKOQwg3"]
+      },
+      "createdTime": "2021-04-28T17:35:46.000Z"
+    },
+    {
+      "id": "recZbf8IQEZeFczJC",
+      "fields": {
+        "name": "lunch",
+        "order": 2,
+        "recipes": [
+          "recUIqDE89ldIhZ1C",
+          "rec09mfnUW1ANcrLB",
+          "recjYZiVwJkVlI1Ih",
+          "recENAsZS69JaVd8D"
+        ]
+      },
+      "createdTime": "2021-04-28T17:35:46.000Z"
+    },
+    {
+      "id": "rec8nleEIijYfXask",
+      "fields": {
+        "name": "dinner",
+        "order": 3,
+        "recipes": [
+          "recUIqDE89ldIhZ1C",
+          "recjYZiVwJkVlI1Ih",
+          "reclQbBhQVPCRkJeJ"
+        ]
+      },
+      "createdTime": "2021-04-28T17:35:46.000Z"
+    },
+    {
+      "id": "recNYi3JyKfi5VRR7",
+      "fields": {
+        "name": "dessert",
+        "order": 4,
+        "recipes": [
+          "recpVs3fZVQpzDjAt",
+          "recvCZMyHMO5eVGGh",
+          "reccmwdCDujx0QquP"
+        ]
+      },
+      "createdTime": "2021-04-28T17:35:50.000Z"
+    },
+    {
+      "id": "recDCSt5cgFhs56tT",
+      "fields": {
+        "name": "soup",
+        "order": 5,
+        "recipes": ["rec09mfnUW1ANcrLB"]
+      },
+      "createdTime": "2021-04-28T17:35:50.000Z"
+    },
+    {
+      "id": "recQ1KAOD6jdy1ZUi",
+      "fields": {
+        "name": "vegetarian",
+        "order": 6,
+        "recipes": ["recENAsZS69JaVd8D"]
+      },
+      "createdTime": "2021-04-28T17:35:50.000Z"
+    },
+    {
+      "id": "recYcmp0PJrHhd4yD",
+      "fields": {
+        "name": "salads",
+        "order": 7,
+        "recipes": ["recnYHTdCbmN44ZSa"]
+      },
+      "createdTime": "2021-04-28T17:35:50.000Z"
+    }
+  ]
+}

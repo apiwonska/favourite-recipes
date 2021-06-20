@@ -15,7 +15,14 @@ export const TestWrapper: React.FC<ITestWrapperProps> = ({
   children,
   route,
 }) => {
-  const client = new QueryClient();
+  const client = new QueryClient({
+    defaultOptions: {
+      queries: {
+        retryDelay: 1,
+        retry: 0,
+      },
+    },
+  });
 
   if (route) {
     history.push(route);
