@@ -10,14 +10,15 @@ import Button from 'react-bootstrap/Button';
 import Alert from 'react-bootstrap/Alert';
 import Spinner from 'react-bootstrap/Spinner';
 
-import { IRecipe } from 'appInterfaces';
+import { IRecipe, ICategory } from 'appInterfaces';
 
 export interface IFormData {
   name: string;
   note: string;
   link: string;
   image: string;
-  [key: string]: string;
+  // [key: string]: string;
+  categories: string[];
 }
 
 interface IUpdateRecipeFormProps {
@@ -29,6 +30,7 @@ interface IUpdateRecipeFormProps {
     unknown
   >;
   isLoading: boolean;
+  categories: ICategory[];
 }
 
 const schema = yup.object().shape({
@@ -42,12 +44,14 @@ const UpdateRecipeForm: React.FC<IUpdateRecipeFormProps> = ({
   recipeData,
   mutateAsync,
   isLoading,
+  categories,
 }) => {
   const defaultFormValues: IFormData = {
     name: recipeData.fields.name,
     note: recipeData.fields.note || '',
     link: recipeData.fields.link,
     image: recipeData.fields.image || '',
+    categories: recipeData.fields.categories || [],
   };
 
   const {
@@ -84,7 +88,7 @@ const UpdateRecipeForm: React.FC<IUpdateRecipeFormProps> = ({
           });
         })}
       >
-        <Form.Group controlId="ar-name">
+        <Form.Group controlId="ur-name">
           <Form.Label>Recipe name</Form.Label>
           <Form.Control
             type="text"
@@ -101,7 +105,7 @@ const UpdateRecipeForm: React.FC<IUpdateRecipeFormProps> = ({
           )}
         </Form.Group>
 
-        <Form.Group controlId="ar-note">
+        <Form.Group controlId="ur-note">
           <Form.Label>Your notes</Form.Label>
           <Form.Control
             as="textarea"
@@ -118,7 +122,7 @@ const UpdateRecipeForm: React.FC<IUpdateRecipeFormProps> = ({
             </Alert>
           )}
         </Form.Group>
-        <Form.Group controlId="ar-link">
+        <Form.Group controlId="ur-link">
           <Form.Label>Link</Form.Label>
           <Form.Control
             type="text"
@@ -133,7 +137,7 @@ const UpdateRecipeForm: React.FC<IUpdateRecipeFormProps> = ({
           )}
         </Form.Group>
 
-        <Form.Group controlId="ar-image">
+        <Form.Group controlId="ur-image">
           <Form.Label>Image url</Form.Label>
           <Form.Control
             type="text"
@@ -146,6 +150,18 @@ const UpdateRecipeForm: React.FC<IUpdateRecipeFormProps> = ({
             </Alert>
           )}
         </Form.Group>
+
+        <Form.Group controlId="ur-categories">
+          <Form.Label>Categories</Form.Label>
+          <Form.Control as="select" multiple {...register('categories')}>
+            {categories.map((category) => (
+              <option key={category.id} value={category.id}>
+                {category.fields.name}
+              </option>
+            ))}
+          </Form.Control>
+        </Form.Group>
+
         <div className="text-right">
           <Button
             variant="warning"

@@ -51,23 +51,28 @@ const RecipeItem: React.FC<IRecipeItemProps> = ({
         />
         <Card.Body className="d-flex flex-column">
           <Card.Title>{name}</Card.Title>
-          <Card.Text className="flex-grow-1">{note}</Card.Text>
-          <Card.Link href={link} style={{ color: 'blue' }} target="_blank">
-            <Icon name={iconEnum.Link} size="1.3em" />
-            &nbsp;Go to Recipe
-          </Card.Link>
-          <div className="my-3">
-            {allCategories &&
-              categories &&
-              categories.map((categoryId) => (
-                <span className="badge badge-secondary mr-2" key={categoryId}>
+
+          {allCategories && categories && (
+            <div className="mb-3">
+              {categories.map((categoryId) => (
+                <span
+                  className="badge badge-secondary mr-2"
+                  key={categoryId}
+                  data-testid="category-tag"
+                >
                   {
                     allCategories.find((category) => category.id === categoryId)
                       ?.fields?.name
                   }
                 </span>
               ))}
-          </div>
+            </div>
+          )}
+          <Card.Text className="flex-grow-1">{note}</Card.Text>
+          <Card.Link href={link} style={{ color: 'blue' }} target="_blank">
+            <Icon name={iconEnum.Link} size="1.3em" />
+            &nbsp;Go to Recipe
+          </Card.Link>
         </Card.Body>
         <Card.Footer className="text-right">
           <Button

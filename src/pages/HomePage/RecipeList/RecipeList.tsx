@@ -7,12 +7,15 @@ import { IRecipe, IRecipeData } from 'appInterfaces';
 import RecipeItem from '../RecipeItem';
 import useFetchRecipes from './useFetchRecipes';
 
-interface IRecipeList {
+export interface IRecipeListProps {
   searchText: string;
   searchCategory: string;
 }
 
-const RecipeList: React.FC<IRecipeList> = ({ searchText, searchCategory }) => {
+const RecipeList: React.FC<IRecipeListProps> = ({
+  searchText,
+  searchCategory,
+}) => {
   const {
     data,
     isLoading,

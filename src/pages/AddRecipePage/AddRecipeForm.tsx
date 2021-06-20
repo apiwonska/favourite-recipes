@@ -11,12 +11,14 @@ import Alert from 'react-bootstrap/Alert';
 import Spinner from 'react-bootstrap/Spinner';
 
 import { IRecipe } from 'appInterfaces';
+import useCategories from 'shared/useCategories';
 
 export interface IFormData {
   name: string;
   note: string;
   link: string;
   image: string;
+  categories?: string[];
 }
 
 interface IAddRecipeFormProps {
@@ -47,6 +49,7 @@ const AddRecipeForm: React.FC<IAddRecipeFormProps> = ({
     resolver: yupResolver(schema),
   });
   const history = useHistory();
+  const { categories } = useCategories();
 
   useEffect(() => {
     setFocus('name');
@@ -123,6 +126,19 @@ const AddRecipeForm: React.FC<IAddRecipeFormProps> = ({
             </Alert>
           )}
         </Form.Group>
+        {categories && (
+          <Form.Group controlId="ar-categories">
+            <Form.Label>Categories</Form.Label>
+            <Form.Control as="select" multiple {...register('categories')}>
+              {categories.map((category) => (
+                <option key={category.id} value={category.id}>
+                  {category.fields.name}
+                </option>
+              ))}
+            </Form.Control>
+          </Form.Group>
+        )}
+
         <div className="text-right">
           <Button
             variant="warning"

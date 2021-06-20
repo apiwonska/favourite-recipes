@@ -17,7 +17,6 @@ const AddRecipe: React.FC = () => {
   const { mutateAsync, isLoading, isError, isSuccess, reset } = useMutation(
     addRecipe,
     {
-      retry: 1,
       onSuccess: () => {
         if (linkRef.current) linkRef.current.focus();
       },
@@ -55,6 +54,7 @@ const AddRecipe: React.FC = () => {
               Error occurred. Please try again later
             </Alert>
           )}
+
           {!isSuccess && <Form {...{ mutateAsync, isLoading }} />}
         </Col>
       </Row>
