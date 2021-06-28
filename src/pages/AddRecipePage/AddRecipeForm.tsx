@@ -2,7 +2,7 @@
 import { useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
-import * as yup from 'yup';
+import yup from 'shared/yup-extended';
 import { useHistory } from 'react-router-dom';
 import { UseMutateAsyncFunction } from 'react-query';
 import Form from 'react-bootstrap/Form';
@@ -18,19 +18,18 @@ export interface IFormData {
   note: string;
   link: string;
   image: string;
-  categories?: string[];
+  categories: string[];
 }
 
 interface IAddRecipeFormProps {
   mutateAsync: UseMutateAsyncFunction<IRecipe, unknown, IFormData, unknown>;
   isLoading: boolean;
 }
-
 const schema = yup.object().shape({
   name: yup.string().trim().required().min(2).max(50),
   note: yup.string().trim().max(100),
   link: yup.string().trim().required().url(),
-  image: yup.string().trim().url(),
+  image: yup.string().trim().url().isJpegImage().maxImageSize(300),
 });
 
 const AddRecipeForm: React.FC<IAddRecipeFormProps> = ({
@@ -45,7 +44,7 @@ const AddRecipeForm: React.FC<IAddRecipeFormProps> = ({
     setFocus,
   } = useForm<IFormData>({
     mode: 'onSubmit',
-    reValidateMode: 'onChange',
+    reValidateMode: 'onSubmit',
     resolver: yupResolver(schema),
   });
   const history = useHistory();
