@@ -1,23 +1,42 @@
 .header {
   width: 100%;
   min-height: 150px;
-  color: #2d3047;
+  color: var(--strong-color);
   background-color: var(--main-color);
   padding: 0;
-  font-family: 'Lobster', cursive;
-  text-align: center;
   display: flex;
-  flex-wrap: wrap;
   align-items: center;
   justify-content: center;
 }
 
-.header-title {
-  font-size: 60px;
-  margin: 30px 30px 10px;
+.header-link {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  margin: 50px 30px 30px;
 }
 
-.header-logo {
-  max-width: 80px;
-  margin: 25px 30px 20px;
+.header-link:hover {
+  color: var(--strong-color);
+  text-decoration: none;
+}
+
+.header-app-name {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  height: 75px;
+}
+
+.header-app-name-img {
+  display: block;
+  margin: 5px 10px;
+  height: 75px;
+}
+
+@media (min-width: 450px) {
+  .header-title {
+    font-size: 60px;
+  }
 }

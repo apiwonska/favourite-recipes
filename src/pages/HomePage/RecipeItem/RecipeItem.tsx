@@ -1,3 +1,4 @@
+import { useEffect, useState } from 'react';
 import { useMutation, useQueryClient } from 'react-query';
 import { useHistory } from 'react-router-dom';
 import Card from 'react-bootstrap/Card';
@@ -29,6 +30,19 @@ const RecipeItem: React.FC<IRecipeItemProps> = ({
     },
   });
   const { categories: allCategories } = useCategories();
+  const [imgSrc, setImgSrc] = useState<string>('');
+
+  useEffect(() => {
+    setImgSrc(image || placeholder);
+  }, [image]);
+
+  const handleSrcError = () => {
+    if (imgSrc === placeholder) {
+      setImgSrc('');
+    } else if (imgSrc) {
+      setImgSrc(placeholder);
+    }
+  };
 
   const handleDelete = () => {
     // eslint-disable-next-line no-alert
@@ -46,8 +60,11 @@ const RecipeItem: React.FC<IRecipeItemProps> = ({
       <Card className="recipe-card flex-grow-1" data-testid="recipe-card">
         <Card.Img
           variant="top"
-          src={image || placeholder}
+          src={imgSrc}
           className="recipe-img"
+          onError={handleSrcError}
+          aria-hidden
+          data-testid="card-img"
         />
         <Card.Body className="d-flex flex-column">
           <Card.Title>{name}</Card.Title>

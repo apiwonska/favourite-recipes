@@ -30,6 +30,7 @@ const UpdateRecipe: React.FC = () => {
     isLoading: isUpdating,
     isError: isUpdateError,
   } = useMutation(updateRecipe, {
+    retry: 1,
     onSuccess: () => {
       if (linkRef.current) linkRef.current.focus();
     },
@@ -56,7 +57,7 @@ const UpdateRecipe: React.FC = () => {
 
       <Row className="justify-content-center">
         <Col className="col-lg-8 my-4 text-left">
-          <h2 className=" mb-5 text-center">Update Recipe</h2>
+          <h1 className=" mb-5 text-center">Update Recipe</h1>
 
           {(isFetching || isFetchingCategories) && (
             <Row className="flex justify-content-center">

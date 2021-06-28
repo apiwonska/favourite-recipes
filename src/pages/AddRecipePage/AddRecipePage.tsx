@@ -17,6 +17,7 @@ const AddRecipe: React.FC = () => {
   const { mutateAsync, isLoading, isError, isSuccess, reset } = useMutation(
     addRecipe,
     {
+      retry: 1,
       onSuccess: () => {
         if (linkRef.current) linkRef.current.focus();
       },
@@ -38,7 +39,7 @@ const AddRecipe: React.FC = () => {
       </div>
       <Row className="justify-content-center">
         <Col className="col-lg-8 my-4 text-left">
-          <h2 className=" mb-5 text-center">Add New Recipe</h2>
+          <h1 className=" mb-5 text-center">Add New Recipe</h1>
           {isSuccess && (
             <>
               <Alert variant="success">Recipe was saved!</Alert>
