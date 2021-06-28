@@ -36,7 +36,7 @@ describe('HomePage', () => {
     render(<WrappedHomePage />);
     const addRecipeLink = screen.getByText(/add new recipe/i);
     const searchForm = screen.getByPlaceholderText(/search recipe/i);
-    const pageHeader = screen.getByRole('heading', { level: 2 });
+    const pageHeader = screen.getByRole('heading', { level: 1 });
     const searchTextInput = screen.getByPlaceholderText(/search recipes/i);
     const searchCategoryInput = screen.getByRole('combobox');
 

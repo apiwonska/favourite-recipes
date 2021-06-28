@@ -1,9 +1,9 @@
 {
   "id": "testid",
   "fields": {
-    "name": "burittoa",
-    "image": "https://www.buritto.jpga",
-    "link": "https://www.buritto.coma",
+    "name": "buritto updated",
+    "image": "https://www.burittoUpdated.com/1.jpg",
+    "link": "https://www.burittoUpdated.com",
     "note": "Yummy!a",
     "categories": ["recFtHrxetyNZteia", "rec8nleEIijYfXask"],
     "locked": false,

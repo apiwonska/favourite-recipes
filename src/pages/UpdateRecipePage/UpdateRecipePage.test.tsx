@@ -86,6 +86,17 @@ describe('UpdateRecipePage', () => {
 
   describe('with valid input', () => {
     const setup = async () => {
+      server.use(
+        rest.head(recipeUpdatedJson.fields.image, (req, res, ctx) =>
+          res(
+            ctx.status(200),
+            ctx.set({
+              'Content-Type': 'image/jpeg',
+              'Content-Length': '20000',
+            })
+          )
+        )
+      );
       const utils = render(<WrappedUpdateRecipePage />);
       await waitForElementToBeRemoved(screen.getByText(/loading/i));
       const nameInput = screen.getByRole('textbox', { name: /name/i });
@@ -97,12 +108,17 @@ describe('UpdateRecipePage', () => {
       });
       const saveButton = screen.getByRole('button', { name: /save/i });
       const homePageLink = screen.getByRole('link', { name: /home page/i });
-      user.type(nameInput, 'a');
-      user.type(linkInput, 'a');
-      user.type(imageInput, 'a');
-      user.type(noteInput, 'a');
+      user.clear(nameInput);
+      user.type(nameInput, recipeUpdatedJson.fields.name);
+      user.clear(linkInput);
+      user.type(linkInput, recipeUpdatedJson.fields.link);
+      user.clear(imageInput);
+      user.type(imageInput, recipeUpdatedJson.fields.image);
+      user.clear(noteInput);
+      user.type(noteInput, recipeUpdatedJson.fields.note);
       user.selectOptions(categoriesInput, 'breakfast');
       user.click(saveButton);
+
       return {
         ...utils,
         nameInput,
@@ -123,6 +139,7 @@ describe('UpdateRecipePage', () => {
         noteInput,
         categoriesInput,
       } = await setup();
+
       const successMessage = await screen.findByText(/recipe was saved/i);
 
       expect(successMessage).toBeInTheDocument();
@@ -173,37 +190,52 @@ describe('UpdateRecipePage', () => {
 
   describe('with invalid input', () => {
     const setup = async () => {
+      server.use(
+        rest.head(recipeJson.fields.image, (req, res, ctx) =>
+          res(
+            ctx.status(200),
+            ctx.set({
+              'Content-Type': 'image/jpeg',
+              'Content-Length': '20000',
+            })
+          )
+        )
+      );
       const utils = render(<WrappedUpdateRecipePage />);
       await waitForElementToBeRemoved(screen.getByText(/loading/i));
       const nameInput = screen.getByRole('textbox', { name: /name/i });
       const linkInput = screen.getByRole('textbox', { name: /link/i });
       const imageInput = screen.getByRole('textbox', { name: /image/i });
       const noteInput = screen.getByRole('textbox', { name: /note/i });
+      const saveButton = screen.getByRole('button', { name: /save recipe/i });
       return {
         ...utils,
         nameInput,
         linkInput,
         imageInput,
         noteInput,
+        saveButton,
       };
     };
 
-    it('renders error for empty required fields on blur', async () => {
-      const { nameInput, linkInput } = await setup();
+    it('renders error for empty required fields on submit', async () => {
+      const { nameInput, linkInput, saveButton } = await setup();
       user.clear(nameInput);
       user.clear(linkInput);
+      user.click(saveButton);
       const errorName = await screen.findByText(/name is a required field/i);
       const errorLink = await screen.findByText(/link is a required field/i);
       expect(errorName).toBeInTheDocument();
       expect(errorLink).toBeInTheDocument();
     });
 
-    it('renders error if user put spaces for required input', async () => {
-      const { nameInput, linkInput } = await setup();
+    it('renders error if required input is spaces', async () => {
+      const { nameInput, linkInput, saveButton } = await setup();
       user.clear(nameInput);
       user.clear(linkInput);
       user.type(nameInput, ' ');
       user.type(linkInput, ' ');
+      user.click(saveButton);
       const errorName = await screen.findByText(/name is a required field/i);
       const errorLink = await screen.findByText(/link is a required field/i);
       expect(errorName).toBeInTheDocument();
@@ -213,9 +245,10 @@ describe('UpdateRecipePage', () => {
     });
 
     it('renders error for name shorter than 2', async () => {
-      const { nameInput } = await setup();
+      const { nameInput, saveButton } = await setup();
       user.clear(nameInput);
       user.type(nameInput, 'a');
+      user.click(saveButton);
       const errorName = await screen.findByText(
         'name must be at least 2 characters'
       );
@@ -224,9 +257,10 @@ describe('UpdateRecipePage', () => {
     });
 
     it('renders error for name longer than 50 characters', async () => {
-      const { nameInput } = await setup();
+      const { nameInput, saveButton } = await setup();
       user.clear(nameInput);
       user.type(nameInput, getString(51));
+      user.click(saveButton);
       const errorName = await screen.findByText(
         'name must be at most 50 characters'
       );
@@ -235,29 +269,71 @@ describe('UpdateRecipePage', () => {
     });
 
     it('renders error for note longer than 100 characters', async () => {
-      const { noteInput } = await setup();
+      const { noteInput, saveButton } = await setup();
       const errorMessage = 'note must be at most 100 characters';
       user.clear(noteInput);
       user.type(noteInput, getString(101));
+      user.click(saveButton);
       const errorNote = await screen.findByText(errorMessage);
       expect(errorNote).toBeInTheDocument();
       expect(noteInput).toHaveAttribute('aria-invalid', 'true');
     });
 
     it('renders error for link if it is not valid url', async () => {
-      const { linkInput } = await setup();
+      server.use(
+        rest.head('http://localhost/buritto.com', (req, res, ctx) =>
+          res(ctx.status(404))
+        )
+      );
+      const { linkInput, saveButton } = await setup();
       const errorMessage = 'link must be a valid URL';
       user.clear(linkInput);
       user.type(linkInput, 'buritto.com');
+      user.click(saveButton);
       expect(await screen.findByText(errorMessage)).toBeInTheDocument();
       expect(linkInput).toHaveAttribute('aria-invalid', 'true');
     });
 
-    it('renders error for image if it is not valid url', async () => {
-      const { imageInput } = await setup();
-      const errorMessage = 'image must be a valid URL';
+    it('renders error for image field if it the resource does not return jpeg file', async () => {
+      server.use(
+        rest.head('http://buritto.com', (req, res, ctx) =>
+          res(
+            ctx.status(200),
+            ctx.set({
+              'Content-Type': 'text/html',
+            })
+          )
+        )
+      );
+      const { imageInput, saveButton } = await setup();
+      const errorMessage = 'enter a valid correct url for jpeg image';
       user.clear(imageInput);
-      user.type(imageInput, 'buritto.com');
+      user.type(imageInput, 'http://buritto.com');
+      user.click(saveButton);
+      expect(await screen.findByText(errorMessage)).toBeInTheDocument();
+      expect(imageInput).toHaveAttribute('aria-invalid', 'true');
+    });
+
+    it('renders error for image field if the content-length is bigger than 300kB', async () => {
+      server.use(
+        rest.head('http://buritto.com/2.jpg', (req, res, ctx) =>
+          res(
+            ctx.status(200),
+            ctx.set({
+              'Content-Type': 'image/jpeg',
+              'Content-Length': '301000',
+            })
+          )
+        )
+      );
+
+      const { imageInput, saveButton } = await setup();
+      const errorMessage =
+        'image size is too big, it should be smaller than 300kB';
+      user.clear(imageInput);
+      user.type(imageInput, 'http://buritto.com/2.jpg');
+      user.click(saveButton);
+
       expect(await screen.findByText(errorMessage)).toBeInTheDocument();
       expect(imageInput).toHaveAttribute('aria-invalid', 'true');
     });

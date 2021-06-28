@@ -11,14 +11,14 @@ const Header: React.FC = () => (
         src={AppName1}
         alt="Favourite recipes"
         className="header-app-name-img"
-        data-testId="app-name"
+        data-testid="app-name"
       />
       <img
         src={AppName2}
         alt=""
         aria-hidden
         className="header-app-name-img"
-        data-testId="app-name"
+        data-testid="app-name"
       />
     </Link>
   </header>

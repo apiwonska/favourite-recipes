@@ -75,6 +75,14 @@ describe('AddRecipePage', () => {
 
   describe('with valid input', () => {
     const setup = async () => {
+      server.use(
+        rest.head('http://buritto.com/1.jpg', (req, res, ctx) =>
+          res(
+            ctx.status(200),
+            ctx.set({ 'Content-Type': 'image/jpeg', 'Content-Length': '50000' })
+          )
+        )
+      );
       const utils = render(<WrappedAddRecipePage />);
       const nameInput = screen.getByRole('textbox', { name: /name/i });
       const linkInput = screen.getByRole('textbox', { name: /link/i });
@@ -87,7 +95,7 @@ describe('AddRecipePage', () => {
       const homePageLink = screen.getByRole('link', { name: /home page/i });
       user.type(nameInput, 'buritto');
       user.type(linkInput, 'http://buritto.com');
-      user.type(imageInput, 'http://buritto.img');
+      user.type(imageInput, 'http://buritto.com/1.jpg');
       user.type(noteInput, "it's awesome");
       user.selectOptions(categoriesInput, ['breakfast', 'lunch']);
       user.click(submitButton);
@@ -154,7 +162,7 @@ describe('AddRecipePage', () => {
       expect(errorLink).toBeInTheDocument();
     });
 
-    it('renders error if required input is missing', async () => {
+    it('renders error if required input consists of white space', async () => {
       render(<WrappedAddRecipePage />);
       const nameInput = screen.getByRole('textbox', { name: /name/i });
       const linkInput = screen.getByRole('textbox', { name: /link/i });
@@ -236,6 +244,11 @@ describe('AddRecipePage', () => {
     });
 
     it('renders error for image if it is not valid url', async () => {
+      server.use(
+        rest.head('http://localhost/buritto img', (req, res, ctx) =>
+          res(ctx.status(404))
+        )
+      );
       render(<WrappedAddRecipePage />);
       const imageInput = screen.getByRole('textbox', { name: /image/i });
       const submitButton = screen.getByRole('button', { name: /submit/i });
@@ -243,7 +256,53 @@ describe('AddRecipePage', () => {
 
       expect(screen.queryByText(errorMessage)).not.toBeInTheDocument();
 
-      user.type(imageInput, 'dsfgfs@ds');
+      user.type(imageInput, 'buritto img');
+      user.click(submitButton);
+
+      expect(await screen.findByText(errorMessage)).toBeInTheDocument();
+      expect(imageInput).toHaveAttribute('aria-invalid', 'true');
+    });
+
+    it('renders error for image field if it the resource does not return jpeg file', async () => {
+      server.use(
+        rest.head('http://buritto.com', (req, res, ctx) =>
+          res(
+            ctx.status(200),
+            ctx.set({
+              'Content-Type': 'html/text',
+            })
+          )
+        )
+      );
+      render(<WrappedAddRecipePage />);
+      const imageInput = screen.getByRole('textbox', { name: /image/i });
+      const submitButton = screen.getByRole('button', { name: /submit/i });
+      const errorMessage = 'enter a valid correct url for jpeg image';
+      user.type(imageInput, 'http://buritto.com');
+      user.click(submitButton);
+
+      expect(await screen.findByText(errorMessage)).toBeInTheDocument();
+      expect(imageInput).toHaveAttribute('aria-invalid', 'true');
+    });
+
+    it('renders error for image field if the content-length is bigger than 300kB', async () => {
+      server.use(
+        rest.head('http://buritto.com/2.jpg', (req, res, ctx) =>
+          res(
+            ctx.status(200),
+            ctx.set({
+              'Content-Type': 'image/jpeg',
+              'Content-Length': '301000',
+            })
+          )
+        )
+      );
+      render(<WrappedAddRecipePage />);
+      const imageInput = screen.getByRole('textbox', { name: /image/i });
+      const submitButton = screen.getByRole('button', { name: /submit/i });
+      const errorMessage =
+        'image size is too big, it should be smaller than 300kB';
+      user.type(imageInput, 'http://buritto.com/2.jpg');
       user.click(submitButton);
 
       expect(await screen.findByText(errorMessage)).toBeInTheDocument();
