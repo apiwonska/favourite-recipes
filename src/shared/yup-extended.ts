@@ -24,7 +24,7 @@ yup.addMethod(
   function isJpegImageFn(message?: string) {
     return this.test(
       'returnJPEG',
-      message || 'enter a valid correct url for jpeg image',
+      message || 'enter a valid correct URL for the jpeg image',
       async (url): Promise<boolean> => {
         if (!url) return true;
         try {

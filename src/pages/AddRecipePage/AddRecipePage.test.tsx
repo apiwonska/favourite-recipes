@@ -277,7 +277,7 @@ describe('AddRecipePage', () => {
       render(<WrappedAddRecipePage />);
       const imageInput = screen.getByRole('textbox', { name: /image/i });
       const submitButton = screen.getByRole('button', { name: /submit/i });
-      const errorMessage = 'enter a valid correct url for jpeg image';
+      const errorMessage = 'enter a valid correct URL for the jpeg image';
       user.type(imageInput, 'http://buritto.com');
       user.click(submitButton);
 

@@ -36,7 +36,7 @@ const HomePage: React.FC = () => {
         </Row>
       </Container>
 
-      <h1 className="mb-5 mt-4">Your Recipes!</h1>
+      <h1 className="mb-5 mt-4">Your Recipes</h1>
       <RecipeList {...{ searchText, searchCategory }} />
     </>
   );

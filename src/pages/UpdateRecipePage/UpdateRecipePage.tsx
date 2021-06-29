@@ -61,7 +61,7 @@ const UpdateRecipe: React.FC = () => {
           ref={linkRef}
         >
           <Icon name={iconEnum.LeftArrow} size="16px" />
-          &nbsp;Go To Home Page
+          &nbsp;Go to the Home Page
         </Link>
       </div>
 

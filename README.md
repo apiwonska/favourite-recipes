@@ -1,20 +1,22 @@
 # Favourite Recipes App
 
-A simple CRUD application created in React with Airtable as database.
+Live demo: [https://favourite-recipes.netlify.app]()
+
+A simple CRUD application has been created in React with Airtable as a database.
 The main purpose for creating this app was to learn react-query library, unit tests with jest/ react testing library, Typescript.
 
 ## Main features:
 
-- Allows to save links to your favourite recipes and add notes to it.
-- It's possible to add category to the recipe.
+- Allows you to save links to your favourite recipes and add notes to them.
+- It's possible to add categories to the recipe.
 - You can create, update and delete recipes. Note: some recipes have been blocked from being modified for demo purposes.
 - You can search for recipes by text and category.
 - Infinite scrolling applied for recipes list browsing.
 - Form validation is made using yup.
 
-## Used technogies and libraries:
+## Used technologies and libraries:
 
-- React (app uses functional components and hooks)
+- React (the app uses functional components and hooks)
 - create-react-app
 - Typescript
 - react-query

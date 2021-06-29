@@ -308,7 +308,7 @@ describe('UpdateRecipePage', () => {
         )
       );
       const { imageInput, saveButton } = await setup();
-      const errorMessage = 'enter a valid correct url for jpeg image';
+      const errorMessage = 'enter a valid correct URL for the jpeg image';
       user.clear(imageInput);
       user.type(imageInput, 'http://buritto.com');
       user.click(saveButton);

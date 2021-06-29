@@ -71,7 +71,8 @@ const AddRecipeForm: React.FC<IAddRecipeFormProps> = ({
             aria-invalid={!!errors.name}
           />
           <Form.Text className="text-muted">
-            This field is required. Name must be between 2 and 50 characters.
+            This field is required. The name must be between 2 and 50
+            characters.
           </Form.Text>
           {errors.name && (
             <Alert variant="danger" className="mt-2">
@@ -89,7 +90,7 @@ const AddRecipeForm: React.FC<IAddRecipeFormProps> = ({
             aria-invalid={!!errors.note}
           />
           <Form.Text className="text-muted">
-            Note must be at most 100 characters.
+            A note must be at most 100 characters.
           </Form.Text>
           {errors.note && (
             <Alert variant="danger" className="mt-2">
@@ -104,7 +105,7 @@ const AddRecipeForm: React.FC<IAddRecipeFormProps> = ({
             {...register('link')}
             aria-invalid={!!errors.link}
           />
-          <Form.Text className="text-muted">This field is required</Form.Text>
+          <Form.Text className="text-muted">This field is required.</Form.Text>
           {errors.link && (
             <Alert variant="danger" className="mt-2">
               {errors.link.message}

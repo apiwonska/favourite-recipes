@@ -4,6 +4,7 @@ import Alert from 'react-bootstrap/Alert';
 import Button from 'react-bootstrap/Button';
 
 import { IRecipe, IRecipeData } from 'appInterfaces';
+import { capitalizeFirstLetter } from 'shared/utils';
 import RecipeItem from '../RecipeItem';
 import useFetchRecipes from './useFetchRecipes';
 
@@ -43,7 +44,9 @@ const RecipeList: React.FC<IRecipeListProps> = ({
     return (
       <Alert variant="danger">
         {error?.message
-          ? `Error occured while loading recipes. ${error.message}`
+          ? `Error occured while loading recipes. ${capitalizeFirstLetter(
+              error.message as string
+            )}.`
           : 'Error occured while loading recipes.'}
       </Alert>
     );
