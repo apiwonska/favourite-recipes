@@ -14,8 +14,10 @@ import recipeJson from '__mocks__/recipe.json';
 import recipeUpdatedJson from '__mocks__/recipeUpdated.json';
 import UpdateRecipePage from './UpdateRecipePage';
 
-const WrappedUpdateRecipePage: React.FC = () => (
-  <TestWrapper route="/update/testid">
+const WrappedUpdateRecipePage: React.FC<{ recipeId?: string }> = ({
+  recipeId = 'testid',
+}) => (
+  <TestWrapper route={`/update/${recipeId}`}>
     <Route path="/update/:recipeId" component={UpdateRecipePage} exact />
   </TestWrapper>
 );
@@ -336,6 +338,21 @@ describe('UpdateRecipePage', () => {
 
       expect(await screen.findByText(errorMessage)).toBeInTheDocument();
       expect(imageInput).toHaveAttribute('aria-invalid', 'true');
+    });
+
+    it('Render PageNotFound404 for "/update/:id" route if recipe id does not exist', async () => {
+      server.use(
+        rest.get(getUrl('/recipes/invalidId'), (req, res, ctx) =>
+          res(ctx.status(404))
+        )
+      );
+      render(<WrappedUpdateRecipePage recipeId="invalidId" />);
+
+      expect(await screen.findByText('Page Not Found')).toBeInTheDocument();
+      expect(
+        screen.queryByRole('heading', { name: /update recipe/i })
+      ).not.toBeInTheDocument();
+      expect(screen.queryByRole('form')).not.toBeInTheDocument();
     });
   });
 });

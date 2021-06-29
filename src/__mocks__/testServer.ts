@@ -11,6 +11,10 @@ import recipeJson from '__mocks__/recipe.json';
 import categoriesJson from '__mocks__/categories.json';
 
 const server = setupServer(
+  rest.get(getUrl('/recipes/testid'), (req, res, ctx) =>
+    res(ctx.status(200), ctx.json(recipeJson))
+  ),
+  rest.put(getUrl('/recipes/testid'), (req, res, ctx) => res(ctx.status(200))),
   rest.get(getUrl('/recipes'), (req, res, ctx) => {
     const offset = req.url.searchParams.get('offset');
     const filterByFormula = req.url.searchParams.get('filterByFormula');
@@ -44,10 +48,6 @@ const server = setupServer(
     return res(ctx.status(200), ctx.json(recipesPage1Json));
   }),
   rest.post(getUrl('/recipes'), (req, res, ctx) => res(ctx.status(200))),
-  rest.get(getUrl('/recipes/testid'), (req, res, ctx) =>
-    res(ctx.status(200), ctx.json(recipeJson))
-  ),
-  rest.put(getUrl('/recipes/testid'), (req, res, ctx) => res(ctx.status(200))),
   rest.get(getUrl('/categories'), (req, res, ctx) =>
     res(ctx.status(200), ctx.json(categoriesJson))
   ),

@@ -1,6 +1,6 @@
 .header {
   width: 100%;
-  min-height: 150px;
+  min-height: 130px;
   color: var(--strong-color);
   background-color: var(--main-color);
   padding: 0;
@@ -14,7 +14,7 @@
   flex-wrap: wrap;
   justify-content: center;
   align-items: center;
-  margin: 50px 30px 30px;
+  margin: 30px 30px 20px;
 }
 
 .header-link:hover {
@@ -22,21 +22,26 @@
   text-decoration: none;
 }
 
+@media (min-width: 450px) {
+  .header-link {
+    margin: 50px 30px 20px;
+  }
+}
+
 .header-app-name {
   display: flex;
   flex-wrap: wrap;
   align-items: center;
-  height: 75px;
 }
 
 .header-app-name-img {
   display: block;
   margin: 5px 10px;
-  height: 75px;
+  height: 50px;
 }
 
 @media (min-width: 450px) {
-  .header-title {
-    font-size: 60px;
+  .header-app-name-img {
+    height: 70px;
   }
 }

@@ -1,9 +1,10 @@
-import { Switch, Route, Redirect } from 'react-router-dom';
+import { Switch, Route } from 'react-router-dom';
 
 import PageLayout from 'layout/PageLayout';
 import HomePage from 'pages/HomePage';
 import AddRecipePage from 'pages/AddRecipePage';
 import UpdateRecipePage from 'pages/UpdateRecipePage';
+import PageNotFound404 from 'pages/PageNotFound404';
 
 function App(): JSX.Element {
   return (
@@ -12,7 +13,7 @@ function App(): JSX.Element {
         <Route path="/" component={HomePage} exact />
         <Route path="/add" component={AddRecipePage} exact />
         <Route path="/update/:recipeId" component={UpdateRecipePage} exact />
-        <Route path="*" render={() => <Redirect to="/" />} />
+        <Route path="*" component={PageNotFound404} />
       </Switch>
     </PageLayout>
   );

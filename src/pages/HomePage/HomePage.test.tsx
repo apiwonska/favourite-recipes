@@ -13,8 +13,6 @@ import { getUrl } from 'apis/recipes';
 import { TestWrapper } from 'shared/testUtils';
 import HomePage from './HomePage';
 
-const queryCache = new QueryCache();
-
 const WrappedHomePage: React.FC = () => (
   <TestWrapper>
     <HomePage />
@@ -23,9 +21,6 @@ const WrappedHomePage: React.FC = () => (
 
 // Tests setup
 testServerSetup();
-afterEach(() => {
-  queryCache.clear();
-});
 
 afterEach(() => {
   jest.restoreAllMocks();

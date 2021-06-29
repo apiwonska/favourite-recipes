@@ -12,7 +12,9 @@ export const fetchRecipe = async (recipeId: string): Promise<IRecipe> => {
     const res = await axiosInstance.get(`/recipes/${recipeId}`);
     return res.data;
   } catch (err) {
-    throw new Error(err.message);
+    throw new Error(
+      `${err.response.statusText}. Error status code:${err.response.status}`
+    );
   }
 };
 

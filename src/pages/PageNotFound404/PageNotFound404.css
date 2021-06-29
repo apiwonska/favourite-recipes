@@ -1,0 +1,9 @@
+.error-picture {
+  width: 200px;
+}
+
+@media (min-width: 400px) {
+  .error-picture {
+    width: 250px;
+  }
+}

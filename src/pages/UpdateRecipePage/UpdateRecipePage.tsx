@@ -11,6 +11,8 @@ import Icon, { iconEnum } from 'assets/Icon';
 import { fetchRecipe, updateRecipe } from 'apis/recipes';
 import useTitle from 'shared/useTitle';
 import useCategories from 'shared/useCategories';
+import { IRecipe } from 'appInterfaces';
+import PageNotFound404 from 'pages/PageNotFound404';
 import Form from './UpdateRecipeForm';
 
 const UpdateRecipe: React.FC = () => {
@@ -22,8 +24,12 @@ const UpdateRecipe: React.FC = () => {
     data,
     isLoading: isFetching,
     isError: isQueryError,
+    error: queryError,
     isSuccess: isQuerySuccess,
-  } = useQuery(['recipe', recipeId], () => fetchRecipe(recipeId));
+  } = useQuery<IRecipe, Error | null, IRecipe, string[]>(
+    ['recipe', recipeId],
+    () => fetchRecipe(recipeId)
+  );
 
   const {
     mutateAsync,
@@ -41,6 +47,10 @@ const UpdateRecipe: React.FC = () => {
     isLoading: isFetchingCategories,
     isError: isCategoriesError,
   } = useCategories();
+
+  if (queryError && queryError.message.includes('404')) {
+    return <PageNotFound404 data-testid="error404" />;
+  }
 
   return (
     <Container>
