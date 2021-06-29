@@ -1,6 +1,6 @@
 # Favourite Recipes App
 
-Live demo: [https://favourite-recipes.netlify.app]()
+Live demo: [https://favourite-recipes.netlify.app](https://favourite-recipes.netlify.app)
 
 A simple CRUD application has been created in React with Airtable as a database.
 The main purpose for creating this app was to learn react-query library, unit tests with jest/ react testing library, Typescript.
