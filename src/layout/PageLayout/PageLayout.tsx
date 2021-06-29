@@ -1,3 +1,6 @@
+import ScrollToTop from 'react-scroll-up';
+
+import Icon, { iconEnum } from 'assets/Icon';
 import './PageLayout.css';
 import Header from '../Header';
 import CurvedHeaderEdge from './CurvedHeaderEdge';
@@ -17,6 +20,11 @@ const PageLayout: React.FC<PageLayoutProps> = ({ children }) => (
       <CurvedFooterEdge fill="#f6ab26" />
     </main>
     <Footer />
+    <ScrollToTop showUnder={300} aria-hidden>
+      <div className="scroll-up-button">
+        <Icon name={iconEnum.ArrowUp} />
+      </div>
+    </ScrollToTop>
   </>
 );
 

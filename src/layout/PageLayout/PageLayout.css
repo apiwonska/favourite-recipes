@@ -88,3 +88,21 @@ h5 {
     padding: 50px 20px;
   }
 }
+
+.scroll-up-button {
+  position: relative;
+  width: 37px;
+  height: 37px;
+  background-color: rgba(220, 220, 220, 0.7);
+  color: #2d3047;
+  border-radius: 5px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1;
+  transform: 0.4s;
+}
+
+.scroll-up-button:hover {
+  background-color: rgba(170, 170, 170, 0.7);
+}
