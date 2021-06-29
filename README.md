@@ -1,23 +1,32 @@
 # Favourite Recipes App
 
 A simple CRUD application created in React with Airtable as database.
-The main goal was to learn react-query library and testing with jest and react-testing-library.
+The main purpose for creating this app was to learn react-query library, unit tests with jest/ react testing library, Typescript.
 
 ## Main features:
 
 - Allows to save links to your favourite recipes and add notes to it.
-- You can create new records, update and delete records.
-- You can add a categories to recipes to facilitate browsing recipes.
+- It's possible to add category to the recipe.
+- You can create, update and delete recipes. Note: some recipes have been blocked from being modified for demo purposes.
+- You can search for recipes by text and category.
 - Infinite scrolling applied for recipes list browsing.
+- Form validation is made using yup.
 
 ## Used technogies and libraries:
 
-- React
+- React (app uses functional components and hooks)
 - create-react-app
-- react-queries
+- Typescript
+- react-query
+- react-hook-form
+- yup
+- react-bootstrap
 - jest
 - react-testing-library
+- msw (Mock Service Worker)
 - Airtable
+- Rest API
+- eslint
 
 ## Setup for developement:
 
@@ -49,6 +58,12 @@ npm start
 
 ## Credits:
 
+- Photos:
+  - background image - Pixabay
+  - recipe image placeholder - Heather Ford, Unsplash
+  - svg illustration - Undraw
+
 ## To improve:
 
-- There is a safety issue to solve
+- Safety
+- Performance
