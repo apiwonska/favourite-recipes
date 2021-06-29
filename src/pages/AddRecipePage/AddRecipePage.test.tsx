@@ -21,7 +21,7 @@ afterEach(() => {
 
 describe('AddRecipePage', () => {
   describe('page layout and initial form state', () => {
-    it('page title is correct', () => {
+    it('alter document title', () => {
       render(<WrappedAddRecipePage />);
       expect(document.title).toContain('Favourite Recipes | Add New Recipe');
     });
