@@ -9,7 +9,7 @@ import Spinner from 'react-bootstrap/Spinner';
 import Icon, { iconEnum } from 'assets/Icon';
 import { IRecipe } from 'appInterfaces';
 import placeholder from 'assets/heather-ford-_U4F6pyOQRs-unsplash.jpg';
-import { deleteRecipe } from 'apis/recipes';
+import { deleteRecipe } from 'api';
 import useCategories from 'shared/useCategories';
 import './RecipeItem.css';
 

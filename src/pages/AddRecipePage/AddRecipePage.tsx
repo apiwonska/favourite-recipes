@@ -8,7 +8,7 @@ import Alert from 'react-bootstrap/Alert';
 import Button from 'react-bootstrap/Button';
 
 import Icon, { iconEnum } from 'assets/Icon';
-import { addRecipe } from 'apis/recipes';
+import { addRecipe } from 'api';
 import useTitle from 'shared/useTitle';
 import Form from './AddRecipeForm';
 

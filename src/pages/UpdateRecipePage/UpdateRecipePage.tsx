@@ -8,7 +8,7 @@ import Alert from 'react-bootstrap/Alert';
 import Spinner from 'react-bootstrap/Spinner';
 
 import Icon, { iconEnum } from 'assets/Icon';
-import { fetchRecipe, updateRecipe } from 'apis/recipes';
+import { fetchRecipe, updateRecipe } from 'api';
 import useTitle from 'shared/useTitle';
 import useCategories from 'shared/useCategories';
 import { IRecipe } from 'appInterfaces';
