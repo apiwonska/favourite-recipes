@@ -2,8 +2,7 @@ import { render, screen, waitFor } from '@testing-library/react';
 import user from '@testing-library/user-event';
 
 import { testServerSetup, server, rest } from '__mocks__/testServer';
-import { TestWrapper, getString } from 'shared/testUtils';
-import { getUrl } from 'apis/recipes';
+import { TestWrapper, getString, getUrl } from 'shared/testUtils';
 import AddRecipePage from './AddRecipePage';
 
 const WrappedAddRecipePage: React.FC = () => (

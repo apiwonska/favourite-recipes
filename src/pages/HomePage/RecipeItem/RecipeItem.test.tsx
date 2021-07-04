@@ -5,7 +5,7 @@ import { TestWrapper } from 'shared/testUtils';
 
 import recipeJson from '__mocks__/recipe.json';
 import { testServerSetup } from '__mocks__/testServer';
-import axiosInstance from 'apis/favoriteRecipesAxiosInstance';
+import api from 'api';
 import RecipeItem, { IRecipeItemProps } from './RecipeItem';
 
 // Tests setup
@@ -51,7 +51,7 @@ test('renders all elements of recipe card', async () => {
 
 test('delete card after clicking delete button and user confirmation', async () => {
   jest
-    .spyOn(axiosInstance, 'delete')
+    .spyOn(api.axiosInstance, 'delete')
     .mockImplementation(
       jest.fn(() =>
         Promise.resolve({ data: { deleted: 'true', id: `${recipeJson.id}` } })
@@ -67,7 +67,9 @@ test('delete card after clicking delete button and user confirmation', async () 
   expect(window.confirm).toBeCalledTimes(1);
   expect(window.confirm).toHaveReturnedWith(true);
   await waitFor(() => {
-    expect(axiosInstance.delete).toBeCalledWith(`/recipes/${recipeJson.id}`);
+    expect(api.axiosInstance.delete).toBeCalledWith(
+      `/recipes?recipeId=${recipeJson.id}`
+    );
   });
 });
 

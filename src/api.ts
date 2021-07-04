@@ -4,7 +4,7 @@ import { IRecipeData, IRecipe, ICategoryData } from 'appInterfaces';
 import { IFormData as IAddRecipeFormData } from 'pages/AddRecipePage/AddRecipeForm';
 import { IFormData as IUpdateRecipeFormData } from 'pages/UpdateRecipePage/UpdateRecipeForm';
 
-const axiosInstance = axios.create({
+export const axiosInstance = axios.create({
   baseURL: '/.netlify/functions',
 });
 
@@ -103,3 +103,5 @@ export const deleteRecipe = async (
     throw new Error(err.message);
   }
 };
+
+export default { axiosInstance };

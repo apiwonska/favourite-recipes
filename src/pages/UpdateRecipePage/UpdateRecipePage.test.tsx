@@ -8,8 +8,7 @@ import user from '@testing-library/user-event';
 import { Route } from 'react-router-dom';
 
 import { testServerSetup, server, rest } from '__mocks__/testServer';
-import { TestWrapper, getString } from 'shared/testUtils';
-import { getUrl } from 'apis/recipes';
+import { TestWrapper, getString, getUrl } from 'shared/testUtils';
 import recipeJson from '__mocks__/recipe.json';
 import recipeUpdatedJson from '__mocks__/recipeUpdated.json';
 import UpdateRecipePage from './UpdateRecipePage';
@@ -164,9 +163,7 @@ describe('UpdateRecipePage', () => {
       // Switch off logging errors
       jest.spyOn(console, 'error').mockImplementation(() => jest.fn());
       server.use(
-        rest.put(getUrl('/recipes/testid'), (req, res, ctx) =>
-          res(ctx.status(500))
-        )
+        rest.put(getUrl('/recipes'), (req, res, ctx) => res(ctx.status(500)))
       );
       const {
         nameInput,
@@ -342,9 +339,7 @@ describe('UpdateRecipePage', () => {
 
     it('Render PageNotFound404 for "/update/:id" route if recipe id does not exist', async () => {
       server.use(
-        rest.get(getUrl('/recipes/invalidId'), (req, res, ctx) =>
-          res(ctx.status(404))
-        )
+        rest.get(getUrl('/recipes'), (req, res, ctx) => res(ctx.status(404)))
       );
       render(<WrappedUpdateRecipePage recipeId="invalidId" />);
 
