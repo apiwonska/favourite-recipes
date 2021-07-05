@@ -93,6 +93,10 @@ module.exports = {
         'react/no-children-prop': 'off', // render method allows only self closing tags
       },
     },
+    {
+      files: ['**/*.js', '**/*.jsx'],
+      rules: { '@typescript-eslint/no-var-requires': 'off' },
+    },
   ],
   settings: {
     // for absolute import configuration

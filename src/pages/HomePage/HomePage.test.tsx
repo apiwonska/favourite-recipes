@@ -4,13 +4,11 @@ import {
   waitFor,
   waitForElementToBeRemoved,
 } from '@testing-library/react';
-import { QueryCache } from 'react-query';
 import user from '@testing-library/user-event';
 
 import { testServerSetup, server, rest } from '__mocks__/testServer';
 import categoriesJson from '__mocks__/categories.json';
-import { getUrl } from 'apis/recipes';
-import { TestWrapper } from 'shared/testUtils';
+import { TestWrapper, getUrl } from 'shared/testUtils';
 import HomePage from './HomePage';
 
 const WrappedHomePage: React.FC = () => (

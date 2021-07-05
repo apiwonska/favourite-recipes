@@ -30,6 +30,7 @@
   },
   "scripts": {
     "start": "react-scripts start",
+    "start:ntl": "ntl dev",
     "build": "react-scripts build",
     "test": "react-scripts test",
     "test:coverage": "react-scripts test --coverage --watchAll=false",
@@ -62,6 +63,7 @@
     "eslint-plugin-prettier": "^3.4.0",
     "eslint-plugin-react": "^7.23.2",
     "eslint-plugin-react-hooks": "^4.2.0",
+    "netlify-cli": "^4.0.5",
     "prettier": "^2.2.1"
   }
 }

@@ -8,8 +8,7 @@ import user from '@testing-library/user-event';
 import { Route } from 'react-router-dom';
 
 import { testServerSetup, server, rest } from '__mocks__/testServer';
-import { TestWrapper, getString } from 'shared/testUtils';
-import { getUrl } from 'apis/recipes';
+import { TestWrapper, getString, getUrl } from 'shared/testUtils';
 import recipeJson from '__mocks__/recipe.json';
 import recipeUpdatedJson from '__mocks__/recipeUpdated.json';
 import UpdateRecipePage from './UpdateRecipePage';
@@ -89,12 +88,14 @@ describe('UpdateRecipePage', () => {
   describe('with valid input', () => {
     const setup = async () => {
       server.use(
-        rest.head(recipeUpdatedJson.fields.image, (req, res, ctx) =>
+        rest.post(getUrl('/getHeaders'), (req, res, ctx) =>
           res(
             ctx.status(200),
-            ctx.set({
-              'Content-Type': 'image/jpeg',
-              'Content-Length': '20000',
+            ctx.json({
+              headers: {
+                'content-type': 'image/jpeg',
+                'content-length': '20000',
+              },
             })
           )
         )
@@ -164,9 +165,7 @@ describe('UpdateRecipePage', () => {
       // Switch off logging errors
       jest.spyOn(console, 'error').mockImplementation(() => jest.fn());
       server.use(
-        rest.put(getUrl('/recipes/testid'), (req, res, ctx) =>
-          res(ctx.status(500))
-        )
+        rest.put(getUrl('/recipes'), (req, res, ctx) => res(ctx.status(500)))
       );
       const {
         nameInput,
@@ -192,17 +191,6 @@ describe('UpdateRecipePage', () => {
 
   describe('with invalid input', () => {
     const setup = async () => {
-      server.use(
-        rest.head(recipeJson.fields.image, (req, res, ctx) =>
-          res(
-            ctx.status(200),
-            ctx.set({
-              'Content-Type': 'image/jpeg',
-              'Content-Length': '20000',
-            })
-          )
-        )
-      );
       const utils = render(<WrappedUpdateRecipePage />);
       await waitForElementToBeRemoved(screen.getByText(/loading/i));
       const nameInput = screen.getByRole('textbox', { name: /name/i });
@@ -210,6 +198,8 @@ describe('UpdateRecipePage', () => {
       const imageInput = screen.getByRole('textbox', { name: /image/i });
       const noteInput = screen.getByRole('textbox', { name: /note/i });
       const saveButton = screen.getByRole('button', { name: /save recipe/i });
+      user.clear(imageInput);
+      user.clear(noteInput);
       return {
         ...utils,
         nameInput,
@@ -273,7 +263,6 @@ describe('UpdateRecipePage', () => {
     it('renders error for note longer than 100 characters', async () => {
       const { noteInput, saveButton } = await setup();
       const errorMessage = 'note must be at most 100 characters';
-      user.clear(noteInput);
       user.type(noteInput, getString(101));
       user.click(saveButton);
       const errorNote = await screen.findByText(errorMessage);
@@ -282,11 +271,6 @@ describe('UpdateRecipePage', () => {
     });
 
     it('renders error for link if it is not valid url', async () => {
-      server.use(
-        rest.head('http://localhost/buritto.com', (req, res, ctx) =>
-          res(ctx.status(404))
-        )
-      );
       const { linkInput, saveButton } = await setup();
       const errorMessage = 'link must be a valid URL';
       user.clear(linkInput);
@@ -298,18 +282,20 @@ describe('UpdateRecipePage', () => {
 
     it('renders error for image field if it the resource does not return jpeg file', async () => {
       server.use(
-        rest.head('http://buritto.com', (req, res, ctx) =>
+        rest.post(getUrl('/getHeaders'), (req, res, ctx) =>
           res(
             ctx.status(200),
-            ctx.set({
-              'Content-Type': 'text/html',
+            ctx.json({
+              headers: {
+                'content-type': 'html/text',
+                'content-length': '20000',
+              },
             })
           )
         )
       );
       const { imageInput, saveButton } = await setup();
       const errorMessage = 'enter a valid correct URL for the jpeg image';
-      user.clear(imageInput);
       user.type(imageInput, 'http://buritto.com');
       user.click(saveButton);
       expect(await screen.findByText(errorMessage)).toBeInTheDocument();
@@ -318,12 +304,14 @@ describe('UpdateRecipePage', () => {
 
     it('renders error for image field if the content-length is bigger than 300kB', async () => {
       server.use(
-        rest.head('http://buritto.com/2.jpg', (req, res, ctx) =>
+        rest.post(getUrl('/getHeaders'), (req, res, ctx) =>
           res(
             ctx.status(200),
-            ctx.set({
-              'Content-Type': 'image/jpeg',
-              'Content-Length': '301000',
+            ctx.json({
+              headers: {
+                'content-type': 'image/jpeg',
+                'content-length': '3010000',
+              },
             })
           )
         )
@@ -332,7 +320,6 @@ describe('UpdateRecipePage', () => {
       const { imageInput, saveButton } = await setup();
       const errorMessage =
         'image size is too big, it should be smaller than 300kB';
-      user.clear(imageInput);
       user.type(imageInput, 'http://buritto.com/2.jpg');
       user.click(saveButton);
 
@@ -342,9 +329,7 @@ describe('UpdateRecipePage', () => {
 
     it('Render PageNotFound404 for "/update/:id" route if recipe id does not exist', async () => {
       server.use(
-        rest.get(getUrl('/recipes/invalidId'), (req, res, ctx) =>
-          res(ctx.status(404))
-        )
+        rest.get(getUrl('/recipes'), (req, res, ctx) => res(ctx.status(404)))
       );
       render(<WrappedUpdateRecipePage recipeId="invalidId" />);
 

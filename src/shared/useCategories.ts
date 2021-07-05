@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useQuery } from 'react-query';
 
-import { fetchCategories } from 'apis/categories';
+import { fetchCategories } from 'api';
 import { ICategory } from 'appInterfaces';
 
 interface IuseCategoryReturn {

@@ -42,3 +42,5 @@ export const getString = (len: number): string => {
   }
   return str;
 };
+
+export const getUrl = (path: string): string => `/.netlify/functions${path}`;

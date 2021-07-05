@@ -11,8 +11,8 @@ declare module 'yup' {
 
 const getHeaders = async (url: string): Promise<{ [key: string]: string }> => {
   try {
-    const res = await axios.head(url);
-    return res.headers;
+    const res = await axios.post('/.netlify/functions/getHeaders', url);
+    return res.data.headers;
   } catch (err) {
     throw new Error();
   }
@@ -29,7 +29,11 @@ yup.addMethod(
         if (!url) return true;
         try {
           const headers = await getHeaders(url);
-          return headers['content-type'] === 'image/jpeg';
+          return (
+            headers['content-type'] === 'image/jpeg' ||
+            headers['content-type'] === 'image/webp' ||
+            headers['content-type'] === 'image/png'
+          );
         } catch (err) {
           return false;
         }
@@ -54,7 +58,9 @@ yup.addMethod(
           }
           return true;
         } catch (err) {
-          return false;
+          // Only show error message for the input if there is content-length header info
+          // Otherwise it pops up when url is invalid
+          return true;
         }
       }
     );
