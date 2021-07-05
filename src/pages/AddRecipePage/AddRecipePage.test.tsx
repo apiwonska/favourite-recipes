@@ -75,7 +75,7 @@ describe('AddRecipePage', () => {
   describe('with valid input', () => {
     const setup = async () => {
       server.use(
-        rest.head('http://buritto.com/1.jpg', (req, res, ctx) =>
+        rest.head(getUrl('/getHeaders'), (req, res, ctx) =>
           res(
             ctx.status(200),
             ctx.set({ 'Content-Type': 'image/jpeg', 'Content-Length': '50000' })
@@ -244,7 +244,7 @@ describe('AddRecipePage', () => {
 
     it('renders error for image if it is not valid url', async () => {
       server.use(
-        rest.head('http://localhost/buritto img', (req, res, ctx) =>
+        rest.head(getUrl('/getHeaders'), (req, res, ctx) =>
           res(ctx.status(404))
         )
       );
@@ -264,7 +264,7 @@ describe('AddRecipePage', () => {
 
     it('renders error for image field if it the resource does not return jpeg file', async () => {
       server.use(
-        rest.head('http://buritto.com', (req, res, ctx) =>
+        rest.head(getUrl('/getHeaders'), (req, res, ctx) =>
           res(
             ctx.status(200),
             ctx.set({
@@ -286,7 +286,7 @@ describe('AddRecipePage', () => {
 
     it('renders error for image field if the content-length is bigger than 300kB', async () => {
       server.use(
-        rest.head('http://buritto.com/2.jpg', (req, res, ctx) =>
+        rest.head(getUrl('/getHeaders'), (req, res, ctx) =>
           res(
             ctx.status(200),
             ctx.set({

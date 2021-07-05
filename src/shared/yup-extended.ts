@@ -11,7 +11,7 @@ declare module 'yup' {
 
 const getHeaders = async (url: string): Promise<{ [key: string]: string }> => {
   try {
-    const res = await axios.head(url);
+    const res = await axios.head(`/.netlify/functions/getHeaders?url=${url}`);
     return res.headers;
   } catch (err) {
     throw new Error();

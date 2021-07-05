@@ -88,7 +88,7 @@ describe('UpdateRecipePage', () => {
   describe('with valid input', () => {
     const setup = async () => {
       server.use(
-        rest.head(recipeUpdatedJson.fields.image, (req, res, ctx) =>
+        rest.head(getUrl('/getHeaders'), (req, res, ctx) =>
           res(
             ctx.status(200),
             ctx.set({
@@ -189,17 +189,6 @@ describe('UpdateRecipePage', () => {
 
   describe('with invalid input', () => {
     const setup = async () => {
-      server.use(
-        rest.head(recipeJson.fields.image, (req, res, ctx) =>
-          res(
-            ctx.status(200),
-            ctx.set({
-              'Content-Type': 'image/jpeg',
-              'Content-Length': '20000',
-            })
-          )
-        )
-      );
       const utils = render(<WrappedUpdateRecipePage />);
       await waitForElementToBeRemoved(screen.getByText(/loading/i));
       const nameInput = screen.getByRole('textbox', { name: /name/i });
@@ -207,6 +196,8 @@ describe('UpdateRecipePage', () => {
       const imageInput = screen.getByRole('textbox', { name: /image/i });
       const noteInput = screen.getByRole('textbox', { name: /note/i });
       const saveButton = screen.getByRole('button', { name: /save recipe/i });
+      user.clear(imageInput);
+      user.clear(noteInput);
       return {
         ...utils,
         nameInput,
@@ -270,7 +261,6 @@ describe('UpdateRecipePage', () => {
     it('renders error for note longer than 100 characters', async () => {
       const { noteInput, saveButton } = await setup();
       const errorMessage = 'note must be at most 100 characters';
-      user.clear(noteInput);
       user.type(noteInput, getString(101));
       user.click(saveButton);
       const errorNote = await screen.findByText(errorMessage);
@@ -295,18 +285,18 @@ describe('UpdateRecipePage', () => {
 
     it('renders error for image field if it the resource does not return jpeg file', async () => {
       server.use(
-        rest.head('http://buritto.com', (req, res, ctx) =>
+        rest.head(getUrl('/getHeaders'), (req, res, ctx) =>
           res(
             ctx.status(200),
             ctx.set({
-              'Content-Type': 'text/html',
+              'Content-Type': 'html/text',
+              'Content-Length': '20000',
             })
           )
         )
       );
       const { imageInput, saveButton } = await setup();
       const errorMessage = 'enter a valid correct URL for the jpeg image';
-      user.clear(imageInput);
       user.type(imageInput, 'http://buritto.com');
       user.click(saveButton);
       expect(await screen.findByText(errorMessage)).toBeInTheDocument();
@@ -315,7 +305,7 @@ describe('UpdateRecipePage', () => {
 
     it('renders error for image field if the content-length is bigger than 300kB', async () => {
       server.use(
-        rest.head('http://buritto.com/2.jpg', (req, res, ctx) =>
+        rest.head(getUrl('/getHeaders'), (req, res, ctx) =>
           res(
             ctx.status(200),
             ctx.set({
@@ -329,7 +319,6 @@ describe('UpdateRecipePage', () => {
       const { imageInput, saveButton } = await setup();
       const errorMessage =
         'image size is too big, it should be smaller than 300kB';
-      user.clear(imageInput);
       user.type(imageInput, 'http://buritto.com/2.jpg');
       user.click(saveButton);
 
