@@ -88,12 +88,14 @@ describe('UpdateRecipePage', () => {
   describe('with valid input', () => {
     const setup = async () => {
       server.use(
-        rest.head(getUrl('/getHeaders'), (req, res, ctx) =>
+        rest.post(getUrl('/getHeaders'), (req, res, ctx) =>
           res(
             ctx.status(200),
-            ctx.set({
-              'Content-Type': 'image/jpeg',
-              'Content-Length': '20000',
+            ctx.json({
+              headers: {
+                'content-type': 'image/jpeg',
+                'content-length': '20000',
+              },
             })
           )
         )
@@ -269,11 +271,6 @@ describe('UpdateRecipePage', () => {
     });
 
     it('renders error for link if it is not valid url', async () => {
-      server.use(
-        rest.head('http://localhost/buritto.com', (req, res, ctx) =>
-          res(ctx.status(404))
-        )
-      );
       const { linkInput, saveButton } = await setup();
       const errorMessage = 'link must be a valid URL';
       user.clear(linkInput);
@@ -285,12 +282,14 @@ describe('UpdateRecipePage', () => {
 
     it('renders error for image field if it the resource does not return jpeg file', async () => {
       server.use(
-        rest.head(getUrl('/getHeaders'), (req, res, ctx) =>
+        rest.post(getUrl('/getHeaders'), (req, res, ctx) =>
           res(
             ctx.status(200),
-            ctx.set({
-              'Content-Type': 'html/text',
-              'Content-Length': '20000',
+            ctx.json({
+              headers: {
+                'content-type': 'html/text',
+                'content-length': '20000',
+              },
             })
           )
         )
@@ -305,12 +304,14 @@ describe('UpdateRecipePage', () => {
 
     it('renders error for image field if the content-length is bigger than 300kB', async () => {
       server.use(
-        rest.head(getUrl('/getHeaders'), (req, res, ctx) =>
+        rest.post(getUrl('/getHeaders'), (req, res, ctx) =>
           res(
             ctx.status(200),
-            ctx.set({
-              'Content-Type': 'image/jpeg',
-              'Content-Length': '301000',
+            ctx.json({
+              headers: {
+                'content-type': 'image/jpeg',
+                'content-length': '3010000',
+              },
             })
           )
         )
